@@ -12,6 +12,7 @@ from rich.table import Table
 
 from .providers.openrouter import OpenRouterProvider
 from .providers.ollama import OllamaProvider
+from .providers.nearai import NearAIProvider
 from .evaluator import Evaluator
 from .external import fetch_openrouter_models, get_model_pricing, estimate_cost
 from .report import generate_report
@@ -51,6 +52,8 @@ class BenchmarkRunner:
         self.api_key_file = self.config.get("openrouter_api_key_file", "~/.config/openrouter/api_key")
         self.openrouter = OpenRouterProvider(self.api_key_file)
         self.ollama = OllamaProvider(self.config.get("ollama_url", "http://localhost:11434"))
+        self.nearai_key_file = self.config.get("nearai_api_key_file", "~/.config/near-ai/api_key")
+        self.nearai = NearAIProvider(self.nearai_key_file)
         self.evaluator = Evaluator(self.config["evaluator_model"], self.api_key_file)
         self._models_data = None
 
@@ -81,6 +84,10 @@ class BenchmarkRunner:
                 raw = self.openrouter.complete(model_id, messages)
                 text = self.openrouter.get_text(raw)
                 usage = self.openrouter.get_usage(raw)
+            elif provider_name == "nearai":
+                raw = self.nearai.complete(model_id, messages)
+                text = self.nearai.get_text(raw)
+                usage = self.nearai.get_usage(raw)
             elif provider_name == "ollama":
                 if not self.ollama.is_available():
                     return {"model": model_id, "scenario": scenario["_file"], "score": 0,
@@ -222,4 +229,5 @@ class BenchmarkRunner:
     def close(self):
         self.openrouter.close()
         self.ollama.close()
+        self.nearai.close()
         self.evaluator.close()
