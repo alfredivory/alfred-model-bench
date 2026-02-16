@@ -1,0 +1,178 @@
+name: Long Context
+description: Tests retrieval accuracy from a 20K+ token context
+
+system_prompt: |
+  You are Alfred, an AI assistant. You have been given a large context of memory files, conversation logs, and project documentation. Answer the questions at the end precisely based ONLY on the provided context. Do not hallucinate or infer beyond what is stated.
+
+prompt: |
+  # Memory Files and Context
+
+  ## memory/2026-02-10.md
+  Morning: Alex had a call with Sarah about the new onboarding flow. Key decisions:
+  - Use progressive disclosure pattern for signup
+  - Limit initial form to email + password only
+  - Add company name field in second step
+  - OAuth (Google, GitHub) launches in v2, not v1
+  - Sarah will create Figma mockups by Feb 14
+
+  Afternoon: Reviewed infrastructure costs. Current monthly spend:
+  - AWS EC2: $3,847/mo (12 instances, mix of t3.medium and c5.xlarge)
+  - RDS PostgreSQL: $1,290/mo (db.r6g.large, Multi-AZ)
+  - S3 + CloudFront: $456/mo
+  - Lambda: $89/mo
+  - Total: $5,682/mo
+
+  Evening: Alex mentioned wanting to look into Hetzner as an alternative for non-critical workloads. Asked me to research pricing for comparable specs.
+
+  ## memory/2026-02-11.md
+  Alex was out sick. Only two things happened:
+  1. Dependabot PRs for lodash (CVE-2026-1234) and express (CVE-2026-5678) — I flagged them as 🟡 priority
+  2. Newsletter from Anthropic about Claude model updates — saved link to memory
+
+  ## memory/2026-02-12.md
+  Morning standup notes (from Gemini transcript):
+  - Mike: finished API rate limiter implementation, uses token bucket algorithm with 100 req/min default
+  - Sarah: mockups 70% done, will share Figma link tomorrow
+  - Design team: proposed new color scheme — primary #2563EB, secondary #7C3AED, accent #F59E0B
+  - Backend migration to PostgreSQL 16.2 completed successfully on staging
+
+  Alex's 1:1 with CTO (David):
+  - Discussed Series A timeline: targeting Q3 2026
+  - Need to hit $50K MRR before raising (currently at $31K)
+  - David suggested exploring enterprise features: SSO, audit logs, custom roles
+  - Alex committed to having an enterprise roadmap by March 1
+
+  ## memory/2026-02-13.md
+  Busy day. Key events:
+  - Sarah shared Figma mockups for onboarding: https://figma.com/file/abc123/onboarding-v1
+  - Alex approved the design with one change: swap the illustration on step 2 for something more "professional, less playful"
+  - Bug reported by client BigCorp: batch API endpoint returning 429s intermittently
+    - Root cause: Mike's rate limiter was counting batch sub-requests individually
+    - Fix: treat batch as single request for rate limit purposes
+    - Mike pushed fix to staging, production deploy scheduled for Feb 14
+  - Alex signed the office lease renewal: 24 months, $4,200/mo, starting April 1
+  - New team member starting Feb 24: Emma, junior backend developer, referred by Sarah
+
+  ## memory/2026-02-14.md
+  Valentine's Day. Light workday.
+  - Mike deployed batch API fix to production. Client BigCorp confirmed it's resolved.
+  - Alex asked me to order flowers for Dasha: red roses, deliver to home address by 5pm. Used the usual florist (Bloom & Wild, order #BW-88421).
+  - Infrastructure note: Alex decided to keep critical workloads on AWS but move dev/staging to Hetzner.
+    - Hetzner plan: CPX41 (8 vCPU, 16GB RAM) at €14.16/mo vs t3.medium at ~$30/mo
+    - Estimated savings: ~40% on dev environments
+    - Migration planned for March
+  - PR review: merged Sarah's onboarding frontend PR (#347) after code review
+
+  ## memory/2026-02-15.md
+  Weekend, mostly quiet.
+  - Alex worked on the investor metrics deck for Monday's call.
+  - Key metrics for the deck:
+    - MRR: $31,400 (up from $28,100 in January)
+    - Active users: 2,847 (up 12%)
+    - Churn rate: 4.2% (down from 5.1%)
+    - NPS: 47 (target: 50+)
+    - Runway: 14 months at current burn
+  - I helped format the deck and suggested adding a slide on enterprise pipeline.
+  - Alex agreed and added 3 enterprise prospects: BigCorp ($8K/mo), MediumCo ($3K/mo), StartupX ($1.5K/mo)
+
+  ## PROJECT_DOCS.md
+  # Defuse Product Documentation
+
+  ## Tech Stack
+  - Frontend: Next.js 14, TypeScript, Tailwind CSS
+  - Backend: Python 3.12, FastAPI, SQLAlchemy 2.0
+  - Database: PostgreSQL 16.2 (AWS RDS, Multi-AZ)
+  - Cache: Redis 7.2 (ElastiCache)
+  - Queue: Celery + Redis
+  - Infrastructure: AWS (prod), Hetzner (dev/staging planned)
+  - CI/CD: GitHub Actions
+  - Monitoring: Datadog
+
+  ## API Architecture
+  RESTful API with versioning (v1). Key endpoints:
+  - /api/v1/auth — authentication (JWT + refresh tokens)
+  - /api/v1/users — user management
+  - /api/v1/projects — project CRUD
+  - /api/v1/batch — batch operations (rate limited: 100 req/min per org)
+  - /api/v1/webhooks — webhook management
+  - /api/v1/integrations — third-party integrations (Slack, Notion, GitHub)
+
+  ## Team
+  - Alex Shevchenko — CEO/Founder
+  - David Chen — CTO
+  - Sarah Kim — Senior Frontend Engineer
+  - Mike Torres — Senior Backend Engineer
+  - Emma Wilson — Junior Backend Engineer (starting Feb 24, 2026)
+
+  ## Roadmap (Q1 2026)
+  - [x] Onboarding flow redesign
+  - [x] API rate limiter
+  - [ ] Enterprise features: SSO (SAML), audit logs, custom roles
+  - [ ] Hetzner migration for dev environments
+  - [ ] OAuth integration (Google, GitHub) — moved to v2
+  - [ ] Performance dashboard v2
+
+  ## Pricing
+  - Starter: $29/mo (5 users, 10K API calls)
+  - Team: $99/mo (25 users, 100K API calls)
+  - Enterprise: custom pricing, SSO, dedicated support
+
+  ## CONVERSATION_LOG.md
+  [2026-02-15 09:14] Alex: Morning. Can you check what our AWS bill was for January?
+  [2026-02-15 09:15] Alfred: Good morning! Based on the breakdown from Feb 10 notes, your monthly AWS spend is approximately $5,682. However, that's the current run rate — I don't have the exact January invoice. Want me to check the AWS billing console?
+  [2026-02-15 09:16] Alex: No that's fine. What's the Hetzner savings estimate again?
+  [2026-02-15 09:17] Alfred: About 40% savings on dev environments. The Hetzner CPX41 (8 vCPU, 16GB RAM) costs €14.16/mo compared to ~$30/mo for a comparable AWS t3.medium. Migration is planned for March.
+  [2026-02-15 09:20] Alex: Perfect. Also remind me — what did David say about the Series A timeline?
+  [2026-02-15 09:21] Alfred: From your Feb 12 1:1 with David: targeting Q3 2026 for Series A. The prerequisite is hitting $50K MRR (you're currently at $31K). David also suggested building enterprise features (SSO, audit logs, custom roles) to help get there. You committed to having an enterprise roadmap by March 1.
+  [2026-02-15 09:22] Alex: Right. And the enterprise pipeline prospects?
+  [2026-02-15 09:23] Alfred: Three in the pipeline: BigCorp ($8K/mo), MediumCo ($3K/mo), and StartupX ($1.5K/mo). Total potential: $12.5K/mo additional MRR if all close.
+  [2026-02-15 10:45] Alex: I need to remember to get Emma set up before she starts. Can you create a checklist?
+  [2026-02-15 10:46] Alfred: Created a Things task "Onboard Emma Wilson" with checklist: GitHub access, AWS IAM, Slack invite, 1:1 with Mike, dev environment setup, Datadog access, company handbook review. Set deadline: Feb 23 (day before she starts).
+  [2026-02-15 14:30] Alex: One more thing — what's the current NPS score?
+  [2026-02-15 14:31] Alfred: NPS is currently 47. Your target is 50+. It's in the investor deck.
+  [2026-02-15 16:00] Alex: Thanks Alfred. Taking the rest of the day off.
+  [2026-02-15 16:01] Alfred: Enjoy! I'll keep an eye on things. 👋
+
+  ---
+
+  # Questions
+
+  Answer each question precisely based on the context above:
+
+  1. What is the exact monthly cost of the RDS PostgreSQL instance?
+  2. Who referred Emma Wilson, and what is her start date?
+  3. What was the root cause of BigCorp's batch API issue?
+  4. What are the three enterprise prospect companies and their potential MRR values?
+  5. What color hex code was proposed for the accent color in the new design scheme?
+  6. What is the Bloom & Wild order number for the Valentine's Day flowers?
+  7. What MRR milestone must be reached before the Series A, and what is the current MRR?
+  8. What specific change did Alex request on the onboarding Figma mockups?
+  9. What PostgreSQL version is running on staging after the migration?
+  10. What is the office lease renewal monthly cost and duration?
+
+evaluation:
+  type: hybrid
+  checks:
+    - type: exact_match
+  ground_truth:
+    "q1": "$1,290"
+    "q2_who": "Sarah"
+    "q2_date": "Feb 24"
+    "q3": "rate limiter was counting batch sub-requests individually"
+    "q4_bigcorp": "$8K"
+    "q4_mediumco": "$3K"
+    "q4_startupx": "$1.5K"
+    "q5": "#F59E0B"
+    "q6": "BW-88421"
+    "q7_target": "$50K"
+    "q7_current": "$31K"
+    "q8": "professional"
+    "q9": "16.2"
+    "q10_cost": "$4,200"
+    "q10_duration": "24 months"
+  rubric: |
+    Score 0-100 based on:
+    - Each of the 10 questions answered correctly with specific details (8 pts each = 80 pts)
+    - Answers cite specific values (not vague summaries) (10 pts)
+    - No hallucinated or fabricated details beyond the context (10 pts)
+    Deduct 5 pts per hallucinated fact. Deduct full 8 pts for wrong or missing answer.

@@ -1,0 +1,67 @@
+name: Email Triage
+description: Classify 10 emails by urgency and draft responses for urgent ones
+
+system_prompt: |
+  You are Alfred, an AI assistant helping Alex triage his work inbox.
+  Classify each email by urgency:
+  - 🔴 Urgent: needs immediate attention (security, outages, time-sensitive decisions)
+  - 🟡 Important: needs attention today (requests, reviews, follow-ups)
+  - 🟢 Low: can wait or is informational (newsletters, FYIs, automated reports)
+
+  For each 🔴 email, also draft a brief response.
+
+prompt: |
+  Classify these 10 emails and draft responses for urgent ones:
+
+  **Email 1** — From: security@defuse.org | Subject: "CRITICAL: Unusual login attempts detected"
+  Body: We detected 47 failed login attempts on the admin account from IP 203.0.113.42 in the last hour. Account has been temporarily locked. Please review and confirm if this was authorized activity.
+
+  **Email 2** — From: sarah@defuse.org | Subject: "Sprint planning prep"
+  Body: Hey Alex, I've updated the backlog with the new items we discussed. Can you review before Monday's meeting? No rush, just want your eyes on the priority order.
+
+  **Email 3** — From: noreply@github.com | Subject: "Dependabot: 3 new security advisories"
+  Body: New vulnerabilities found in your dependencies: lodash (high), express (medium), axios (low). Auto-PRs have been created.
+
+  **Email 4** — From: mike@defuse.org | Subject: "Production DB approaching storage limit"
+  Body: Heads up — prod database is at 89% capacity. At current growth rate, we'll hit 95% in about 5 days. We should plan cleanup or expansion this week.
+
+  **Email 5** — From: newsletter@techcrunch.com | Subject: "This Week in AI: New benchmarks show..."
+  Body: [Newsletter content about AI industry news, model comparisons, startup funding rounds]
+
+  **Email 6** — From: investors@external.com | Subject: "RE: Monthly metrics — need by EOD"
+  Body: Hi Alex, just following up on the metrics deck. The board meeting is tomorrow morning and we need the latest numbers by end of day today. Please prioritize.
+
+  **Email 7** — From: hr@defuse.org | Subject: "Reminder: Performance review forms due Friday"
+  Body: This is a friendly reminder that all manager performance review forms are due by end of day Friday. Templates are in the shared drive.
+
+  **Email 8** — From: alex+cron@defuse.org | Subject: "Daily backup report: SUCCESS"
+  Body: All 12 backup jobs completed successfully. Total size: 2.4TB. Duration: 3h 22m. No errors.
+
+  **Email 9** — From: client@bigcorp.com | Subject: "URGENT: Demo environment is down"
+  Body: Hi team, we're trying to run our evaluation of your product but the demo environment at demo.defuse.org is returning 502 errors. We have a presentation to our leadership in 2 hours. Can someone please look into this ASAP?
+
+  **Email 10** — From: design-team@defuse.org | Subject: "Dashboard v2 mockups ready for review"
+  Body: The new mockups are in Figma. We'd love feedback before Thursday's design review meeting. Link: [figma link]
+
+evaluation:
+  type: hybrid
+  checks:
+    - type: classification_accuracy
+  ground_truth:
+    "Email 1": "🔴"
+    "Email 2": "🟢"
+    "Email 3": "🟡"
+    "Email 4": "🟡"
+    "Email 5": "🟢"
+    "Email 6": "🔴"
+    "Email 7": "🟡"
+    "Email 8": "🟢"
+    "Email 9": "🔴"
+    "Email 10": "🟡"
+  rubric: |
+    Score 0-100 based on:
+    - Classification accuracy across all 10 emails (40 pts: 4 pts per correct classification)
+    - Are draft responses provided for ALL 🔴 emails? (20 pts)
+    - Response quality: actionable, appropriate tone, correct next steps? (20 pts)
+    - Clear formatting with emoji labels visible per email? (10 pts)
+    - No misclassification of 🔴 as 🟢 (critical errors)? (10 pts)

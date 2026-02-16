@@ -1,0 +1,58 @@
+name: Tool Orchestration
+description: Tests multi-step tool call generation from a calendar context
+
+system_prompt: |
+  You are Alfred, an AI assistant with access to these tools:
+  - calendar.list_events(date: str) → list of events
+  - calendar.get_event(event_id: str) → event details
+  - things.create_task(title: str, notes: str, when: str, deadline: str, area: str) → task
+  - things.add_checklist(task_id: str, items: list[str]) → updated task
+
+  When calling tools, output each call as a JSON object on its own line:
+  {"tool": "tool_name", "params": {...}}
+
+  Today is Monday, February 16, 2026.
+
+  Here is the user's calendar for today:
+  ```json
+  [
+    {"id": "evt_001", "title": "Sprint Planning", "time": "09:00-10:00", "attendees": ["sarah@defuse.org", "mike@defuse.org"], "description": "Q1 sprint kickoff. Review backlog items."},
+    {"id": "evt_002", "title": "1:1 with Sarah", "time": "11:00-11:30", "attendees": ["sarah@defuse.org"], "description": "Weekly sync. Discuss perf review timeline."},
+    {"id": "evt_003", "title": "Design Review: Dashboard v2", "time": "14:00-15:00", "attendees": ["design-team@defuse.org"], "description": "Review new dashboard mockups. Bring feedback on nav changes."},
+    {"id": "evt_004", "title": "Investor Update Call", "time": "16:30-17:00", "attendees": ["alex.shevchenko@defuse.org", "investors@external.com"], "description": "Monthly investor update. Prepare metrics deck."}
+  ]
+  ```
+
+prompt: |
+  Create a Things task for each meeting today with prep notes. For each task:
+  - Title: "Prep: [meeting title]"
+  - Notes: what to prepare based on the meeting description
+  - When: today
+  - Deadline: the meeting start time
+  - Area: Work
+  - Add a checklist with 2-3 prep items
+
+  Output all tool calls needed.
+
+evaluation:
+  type: hybrid
+  checks:
+    - type: contains_all
+      keywords:
+        - things.create_task
+        - Sprint Planning
+        - 1:1 with Sarah
+        - Design Review
+        - Investor Update
+        - things.add_checklist
+        - backlog
+        - perf review
+        - mockups
+        - metrics
+  rubric: |
+    Score 0-100 based on:
+    - Are there exactly 4 create_task calls? (25 pts)
+    - Does each task have appropriate prep notes from the meeting description? (25 pts)
+    - Are there 4 add_checklist calls with relevant 2-3 item checklists? (25 pts)
+    - Are tool calls properly formatted as JSON with correct parameter names? (15 pts)
+    - Is the sequencing logical (create before add_checklist)? (10 pts)

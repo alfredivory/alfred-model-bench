@@ -1,0 +1,41 @@
+openrouter_api_key_file: ~/.config/openrouter/api_key
+ollama_url: http://localhost:11434
+evaluator_model: anthropic/claude-sonnet-4-20250514
+
+models:
+  # Cloud (OpenRouter)
+  - id: anthropic/claude-sonnet-4-20250514
+    provider: openrouter
+  - id: anthropic/claude-opus-4-20250514
+    provider: openrouter
+  - id: openai/gpt-4o
+    provider: openrouter
+  - id: openai/gpt-4o-mini
+    provider: openrouter
+  - id: openai/o3
+    provider: openrouter
+  - id: openai/o4-mini
+    provider: openrouter
+  - id: google/gemini-2.5-pro-preview
+    provider: openrouter
+  - id: google/gemini-2.5-flash-preview
+    provider: openrouter
+  - id: deepseek/deepseek-chat-v3-0324
+    provider: openrouter
+  - id: deepseek/deepseek-r1
+    provider: openrouter
+  - id: meta-llama/llama-4-maverick
+    provider: openrouter
+  - id: qwen/qwen-2.5-72b-instruct
+    provider: openrouter
+
+  # Local (Ollama) - optional
+  - id: llama3.2:8b
+    provider: ollama
+    optional: true
+  - id: qwen2.5:14b
+    provider: ollama
+    optional: true
+  - id: mistral:7b
+    provider: ollama
+    optional: true

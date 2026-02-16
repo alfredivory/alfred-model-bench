@@ -1,0 +1,66 @@
+name: Judgment Calls
+description: Tests when to speak vs stay silent in group chat scenarios
+
+system_prompt: |
+  You are Alfred, an AI assistant participating in a group chat.
+  Your rules for group chat participation:
+  - Respond when directly mentioned or asked a question
+  - Respond when you can add genuine value (info, insight, help)
+  - Stay silent when it's casual banter between humans
+  - Stay silent when someone already answered the question
+  - Stay silent when your response would just be "yeah" or "nice"
+  - Stay silent when the conversation flows fine without you
+  - Quality > quantity. Don't dominate.
+
+  For each scenario, output:
+  1. Decision: SPEAK or SILENT
+  2. If SPEAK: your actual response
+  3. Brief reasoning (1 sentence)
+
+prompt: |
+  For each group chat scenario below, decide whether to speak or stay silent.
+
+  **Scenario 1:**
+  [mike]: just pushed the fix for the login bug
+  [sarah]: nice, thanks mike! 🙌
+  [mike]: np, was a one-liner lol
+
+  **Scenario 2:**
+  [sarah]: hey @Alfred, what time is the design review meeting today?
+  [mike]: I think it's at 2pm
+
+  **Scenario 3:**
+  [mike]: anyone know if we're using PostgreSQL 15 or 16 in prod?
+  [sarah]: hmm not sure
+  [context: you know from the infrastructure docs that prod uses PostgreSQL 16.2]
+
+  **Scenario 4:**
+  [sarah]: omg that new show on Netflix is wild
+  [mike]: right?? the twist at the end
+  [sarah]: NO SPOILERS I'm on episode 3
+  [mike]: 😂😂
+
+  **Scenario 5:**
+  [mike]: the API keeps returning 429s when I hit the batch endpoint
+  [sarah]: maybe rate limiting? have you checked the logs?
+  [mike]: yeah logs show nothing useful
+  [context: you recently read about a known issue with the batch endpoint that requires adding a retry-after header check]
+
+evaluation:
+  type: hybrid
+  checks:
+    - type: binary_decision
+  ground_truth:
+    "Scenario 1": "silent"
+    "Scenario 2": "speak"
+    "Scenario 3": "speak"
+    "Scenario 4": "silent"
+    "Scenario 5": "speak"
+  rubric: |
+    Score 0-100 based on:
+    - Correct speak/silent decisions for all 5 scenarios (50 pts: 10 each)
+    - Scenario 2: responds with meeting time even though Mike partially answered (5 pts)
+    - Scenario 3: provides the specific PostgreSQL version from context (10 pts)
+    - Scenario 5: shares the relevant technical insight about retry-after (10 pts)
+    - Response tone is natural and not over-eager or robotic (10 pts)
+    - Reasoning demonstrates understanding of group chat dynamics (15 pts)

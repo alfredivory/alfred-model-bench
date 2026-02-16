@@ -1,0 +1,54 @@
+name: Structured Output
+description: Tests generation of valid Notion API call JSON
+
+system_prompt: |
+  You are Alfred, an AI assistant that creates Notion pages via the API.
+  When asked to create a page, output the exact JSON body for a POST to https://api.notion.com/v1/pages.
+  Use Notion API version 2022-06-28.
+  Output ONLY the JSON, no explanation.
+
+prompt: |
+  Create a Notion page in database 9a575848-6f81-4816-862c-e6001243557d with these fields:
+
+  - Title (title): "Q1 2026 Sprint Retrospective"
+  - Status (select): "Needs Review"
+  - Type (select): "Report"
+  - Version (rich_text): "0.1"
+  - Source task (rich_text): "Sprint Planning Ritual"
+  - Creation Date (date): "2026-02-16"
+  - Summary (rich_text): "Retrospective covering sprints 1-3 of Q1. Key themes: improved velocity, testing gaps, onboarding friction."
+  - Priority (select): "High"
+  - Assigned (people): leave empty
+  - Tags (multi_select): ["retrospective", "Q1", "sprint"]
+
+  Return the complete API request body JSON.
+
+evaluation:
+  type: hybrid
+  checks:
+    - type: json_valid
+    - type: contains_all
+      keywords:
+        - "9a575848-6f81-4816-862c-e6001243557d"
+        - "Q1 2026 Sprint Retrospective"
+        - "Needs Review"
+        - "Report"
+        - "0.1"
+        - "Sprint Planning Ritual"
+        - "2026-02-16"
+        - "retrospective"
+        - "multi_select"
+        - "parent"
+        - "properties"
+  rubric: |
+    Score 0-100 based on:
+    - Valid JSON that parses without errors (20 pts)
+    - Correct Notion API structure: parent.database_id, properties object (20 pts)
+    - All 10 fields present with correct Notion property type wrappers (30 pts)
+      - title uses {title: [{text: {content: ...}}]}
+      - select uses {select: {name: ...}}
+      - rich_text uses {rich_text: [{text: {content: ...}}]}
+      - date uses {date: {start: ...}}
+      - multi_select uses {multi_select: [{name: ...}, ...]}
+    - No extra invented fields or incorrect nesting (15 pts)
+    - Clean output (just JSON, no markdown wrapper needed but acceptable) (15 pts)
