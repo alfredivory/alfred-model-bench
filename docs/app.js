@@ -46,6 +46,7 @@ let radarChart = null;
 let barChart = null;
 let globalData = null;
 let currentFilter = "all";
+let showScenarios = false;
 
 function isOpenWeight(model) {
   return OPEN_WEIGHT_PREFIXES.some(p => model.startsWith(p));
@@ -137,6 +138,19 @@ function renderFilters() {
     };
     container.appendChild(btn);
   });
+
+  // Scenario toggle button
+  const scenarioBtn = document.createElement("button");
+  scenarioBtn.textContent = showScenarios ? "Hide Scenarios" : "Show Scenarios";
+  scenarioBtn.className = "filter-btn" + (showScenarios ? " active" : "");
+  scenarioBtn.style.marginLeft = "auto";
+  scenarioBtn.onclick = () => {
+    showScenarios = !showScenarios;
+    scenarioBtn.textContent = showScenarios ? "Hide Scenarios" : "Show Scenarios";
+    scenarioBtn.classList.toggle("active", showScenarios);
+    document.getElementById("ranking").classList.toggle("hide-scenarios", !showScenarios);
+  };
+  container.appendChild(scenarioBtn);
 }
 
 function computeCostPerMTok(data) {
@@ -170,6 +184,7 @@ function renderAll() {
   document.getElementById("matrix-body").innerHTML = "";
   sortDir = {};
 
+  document.getElementById("ranking").classList.toggle("hide-scenarios", !showScenarios);
   renderTable(models, scenarios, summary, data._tokPerSec, data._costPerMTok);
   renderRadar(models, scenarios, summary);
   renderBarChart(models, data._tokPerSec);
@@ -182,6 +197,7 @@ function renderAll() {
 function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
   const head = document.getElementById("table-head");
   const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "OpenRouter Tok/s", "Best Quant ¹", "VRAM ¹", "Est. Local TPS ¹", "Est. Local Score ¹", "OpenRouter $/1M", "NEAR AI $/M"];
+  const scenarioLabels = scenarios.map(s => s.replace(/_/g, " "));
   cols.forEach((c, i) => {
     const th = document.createElement("th");
     if (c === "NEAR AI $/M") {
@@ -189,6 +205,7 @@ function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
     } else {
       th.textContent = c;
     }
+    if (scenarioLabels.includes(c)) th.classList.add("scenario-col");
     th.style.cursor = "pointer";
     th.onclick = () => sortTable(i);
     head.appendChild(th);
@@ -214,6 +231,7 @@ function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
     scenarios.forEach(sc => {
       const v = s.scores[sc] ?? "—";
       const td = document.createElement("td");
+      td.classList.add("scenario-col");
       td.textContent = v;
       if (typeof v === "number" && v <= 100 && v >= 0) td.classList.add(scoreClass(v));
       tr.appendChild(td);

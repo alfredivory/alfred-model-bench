@@ -94,3 +94,15 @@ tr:hover { background: #1e2230; }
 .arch-separator td { border: none; height: 8px; }
 .cost-bad { color: #fca5a5; font-weight: 600; }
 
+/* Collapsible scenario columns */
+.hide-scenarios .scenario-col { display: none; }
+
+/* Table horizontal scroll + sticky model column */
+#ranking { overflow-x: auto; }
+#model-table { min-width: 900px; }
+#model-table th:nth-child(2),
+#model-table td:nth-child(2) { position: sticky; left: 0; z-index: 1; background: var(--surface); min-width: 180px; }
+#model-table th:nth-child(2) { background: #12141c; z-index: 2; }
+#model-table th { white-space: nowrap; }
+#model-table td { white-space: nowrap; }
+
