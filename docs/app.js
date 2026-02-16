@@ -165,7 +165,7 @@ function renderAll() {
 /* ── Table ── */
 function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
   const head = document.getElementById("table-head");
-  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Best Quant ¹", "VRAM ¹", "Est. Local TPS ¹", "Est. Quality ¹", "$/1M tok"];
+  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Best Quant ¹", "VRAM ¹", "Est. Local TPS ¹", "Est. Local Score ¹", "$/1M tok"];
   cols.forEach((c, i) => {
     const th = document.createElement("th");
     th.textContent = c;
@@ -227,10 +227,16 @@ function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
     tdLocal.textContent = est ? `~${est.tps}` : "—";
     tr.appendChild(tdLocal);
 
-    // Est. Quality
+    // Est. Local Score
     const tdQual = document.createElement("td");
-    tdQual.textContent = est ? `~${est.qualityRetention}%` : "—";
-    if (est) tdQual.title = "Estimated score at this quantization = cloud_score × quality_retention / 100";
+    if (est) {
+      const estScore = (s.average_score * est.qualityRetention / 100).toFixed(1);
+      tdQual.textContent = estScore;
+      if (parseFloat(estScore) >= 0 && parseFloat(estScore) <= 100) tdQual.classList.add(scoreClass(parseFloat(estScore)));
+      tdQual.title = "Estimated score when running locally = cloud score × quality retention at best-fit quantization";
+    } else {
+      tdQual.textContent = "—";
+    }
     tr.appendChild(tdQual);
 
     // Cost per 1M tokens
