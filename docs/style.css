@@ -31,4 +31,22 @@ tr:hover { background: #1e2230; }
 .model-name { font-weight: 500; }
 .chart-container-bar { height: 400px; max-width: 900px; margin: 0 auto; }
 .footnote { color: var(--muted); font-size: .75rem; margin-top: 1rem; font-style: italic; }
+.near-ai-header { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.near-ai-badge { font-size: .55rem; background: #1e3a5f; color: #67e8f9; padding: .1rem .4rem; border-radius: 3px; font-weight: 700; letter-spacing: .5px; }
+.rec-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+.rec-card { background: var(--bg); border-radius: 12px; padding: 1.5rem; border: 2px solid var(--border); transition: transform .15s, box-shadow .15s; }
+.rec-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+.rec-card-cloud { border-color: #fbbf24; }
+.rec-card-local { border-color: #6ee7b7; }
+.rec-card-value { border-color: #93c5fd; }
+.rec-card-icon { font-size: 2rem; margin-bottom: .5rem; }
+.rec-card-title { font-size: 1rem; font-weight: 700; margin-bottom: .75rem; }
+.rec-card-cloud .rec-card-title { color: #fbbf24; }
+.rec-card-local .rec-card-title { color: #6ee7b7; }
+.rec-card-value .rec-card-title { color: #93c5fd; }
+.rec-card-model { font-size: 1.2rem; font-weight: 700; color: var(--text); margin-bottom: .5rem; }
+.rec-card-stats { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }
+.rec-card-stat { background: var(--surface); padding: .25rem .6rem; border-radius: 6px; font-size: .78rem; color: var(--muted); }
+.rec-card-stat strong { color: var(--text); }
+.rec-card-note { font-size: .8rem; color: var(--muted); font-style: italic; line-height: 1.4; }
 @media (max-width: 768px) { body { padding: 1rem; } .chart-container { height: 350px; } table { font-size: .75rem; } th, td { padding: .35rem .5rem; } }

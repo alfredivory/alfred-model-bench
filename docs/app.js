@@ -27,6 +27,16 @@ const MAC_STUDIO_ESTIMATES = {
   "minimax/minimax-m1": { quant: "Q8", memGB: 460, tps: 14, qualityRetention: 99 },
 };
 
+const NEAR_AI_PRICING = {
+  "anthropic/claude-opus-4": { input: 5.00, output: 25.00 },
+  "deepseek/deepseek-chat-v3-0324": { input: 1.05, output: 3.10 },
+};
+
+function nearAiBlended(model) {
+  const p = NEAR_AI_PRICING[model];
+  return p ? (p.input + p.output) / 2 : null;
+}
+
 let sortDir = {};
 let radarChart = null;
 let barChart = null;
@@ -159,16 +169,21 @@ function renderAll() {
   renderTable(models, scenarios, summary, data._tokPerSec, data._costPerMTok);
   renderRadar(models, scenarios, summary);
   renderBarChart(models, data._tokPerSec);
+  renderRecommendations(allModels, summary, data._costPerMTok);
   renderMatrix(models, scenarios, summary);
 }
 
 /* ── Table ── */
 function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
   const head = document.getElementById("table-head");
-  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Best Quant ¹", "VRAM ¹", "Est. Local TPS ¹", "Est. Local Score ¹", "$/1M tok"];
+  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Best Quant ¹", "VRAM ¹", "Est. Local TPS ¹", "Est. Local Score ¹", "$/1M tok", "NEAR AI $/M"];
   cols.forEach((c, i) => {
     const th = document.createElement("th");
-    th.textContent = c;
+    if (c === "NEAR AI $/M") {
+      th.innerHTML = '<span class="near-ai-header"><span class="near-ai-badge">NEAR AI</span>$/M</span>';
+    } else {
+      th.textContent = c;
+    }
     th.style.cursor = "pointer";
     th.onclick = () => sortTable(i);
     head.appendChild(th);
@@ -244,6 +259,12 @@ function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
     const cpm = costPerMTok[m];
     tdCost.textContent = cpm != null ? `$${cpm.toFixed(2)}/1M` : "—";
     tr.appendChild(tdCost);
+
+    // NEAR AI $/M
+    const tdNear = document.createElement("td");
+    const nearCost = nearAiBlended(m);
+    tdNear.textContent = nearCost != null ? `$${nearCost.toFixed(2)}/M` : "—";
+    tr.appendChild(tdNear);
 
     body.appendChild(tr);
   });
@@ -349,6 +370,79 @@ function renderMatrix(models, scenarios, summary) {
       tr.appendChild(td);
     });
     body.appendChild(tr);
+  });
+}
+
+/* ── Recommendations ── */
+function renderRecommendations(allModels, summary, costPerMTok) {
+  const container = document.getElementById("recommendation-cards");
+  container.innerHTML = "";
+
+  // Best Cloud: highest avg score, tiebreak by lowest cost
+  const ranked = allModels.map(m => ({ model: m, score: summary.models[m].average_score, cost: costPerMTok[m] }))
+    .sort((a, b) => b.score - a.score || (a.cost || Infinity) - (b.cost || Infinity));
+  const bestCloud = ranked[0];
+  // Among models tied at top score, find best cost ratio
+  const topScore = bestCloud.score;
+  const topTied = ranked.filter(r => r.score === topScore);
+  const cheapestTop = topTied.reduce((a, b) => ((a.cost || Infinity) < (b.cost || Infinity) ? a : b));
+  const cloudNote = topTied.length > 1
+    ? `${shortName(cheapestTop.model)} offers the best score-to-cost ratio among ${topTied.length} models tied at ${topScore}.`
+    : `Top performer across all benchmarks.`;
+
+  // Best Local: Mac Studio model with highest est local score
+  const localRanked = MAC_STUDIO_MODELS
+    .filter(m => summary.models[m])
+    .map(m => {
+      const est = MAC_STUDIO_ESTIMATES[m];
+      const estScore = parseFloat((summary.models[m].average_score * est.qualityRetention / 100).toFixed(1));
+      return { model: m, estScore, ...est };
+    })
+    .sort((a, b) => b.estScore - a.estScore);
+  const bestLocal = localRanked[0];
+  const localNote = bestLocal.qualityRetention === 100
+    ? `Full ${bestLocal.quant} precision with zero quality loss. Best local option.`
+    : `${bestLocal.quant} quantization with ${bestLocal.qualityRetention}% quality retention.`;
+
+  // Best Value: highest score-per-dollar (local = infinite value, so pick best cloud value)
+  const valueModels = allModels
+    .filter(m => costPerMTok[m] != null && costPerMTok[m] > 0)
+    .map(m => ({ model: m, score: summary.models[m].average_score, cost: costPerMTok[m], ratio: summary.models[m].average_score / costPerMTok[m] }))
+    .sort((a, b) => b.ratio - a.ratio);
+  const bestValue = valueModels[0];
+  const valueNote = bestLocal
+    ? `For budget setups, ${shortName(bestLocal.model)} locally costs $0/token with competitive quality (est. ${bestLocal.estScore}).`
+    : `Best bang for your buck in the cloud.`;
+
+  const cards = [
+    { cls: "rec-card-cloud", icon: "☁️", title: "Best Cloud Agent", model: shortName(bestCloud.model), stats: [
+      { label: "Score", value: bestCloud.score },
+      ...(bestCloud.cost != null ? [{ label: "Cost", value: `$${bestCloud.cost.toFixed(2)}/1M tok` }] : []),
+    ], note: cloudNote },
+    ...(bestLocal ? [{ cls: "rec-card-local", icon: "🖥️", title: "Best Local Agent (Mac Studio 512GB)", model: shortName(bestLocal.model), stats: [
+      { label: "Est. Score", value: bestLocal.estScore },
+      { label: "Quant", value: bestLocal.quant },
+      { label: "TPS", value: `~${bestLocal.tps}` },
+      { label: "VRAM", value: `${bestLocal.memGB} GB` },
+    ], note: localNote }] : []),
+    ...(bestValue ? [{ cls: "rec-card-value", icon: "💰", title: "Best Value Agent", model: shortName(bestValue.model), stats: [
+      { label: "Score", value: bestValue.score },
+      { label: "Cost", value: `$${bestValue.cost.toFixed(2)}/1M tok` },
+      { label: "Score/$", value: bestValue.ratio.toFixed(1) },
+    ], note: valueNote }] : []),
+  ];
+
+  cards.forEach(c => {
+    const div = document.createElement("div");
+    div.className = `rec-card ${c.cls}`;
+    div.innerHTML = `
+      <div class="rec-card-icon">${c.icon}</div>
+      <div class="rec-card-title">${c.title}</div>
+      <div class="rec-card-model">${c.model}</div>
+      <div class="rec-card-stats">${c.stats.map(s => `<span class="rec-card-stat">${s.label}: <strong>${s.value}</strong></span>`).join("")}</div>
+      <div class="rec-card-note">${c.note}</div>
+    `;
+    container.appendChild(div);
   });
 }
 
