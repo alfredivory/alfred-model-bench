@@ -451,4 +451,111 @@ function renderRecommendations(allModels, summary, costPerMTok) {
   });
 }
 
+/* ── Hybrid Architecture Guide ── */
+function renderArchitectureGuide(summary, costPerMTok, tokPerSec) {
+  const container = document.getElementById("hybrid-architecture");
+
+  // Pull real data
+  const llama = "meta-llama/llama-3.3-70b-instruct";
+  const flash = "google/gemini-2.5-flash";
+  const llamaScore = summary.models[llama]?.average_score || 91.8;
+  const flashScore = summary.models[flash]?.average_score || 95.7;
+  const llamaEst = MAC_STUDIO_ESTIMATES[llama];
+  const flashCost = costPerMTok[flash];
+
+  // Cost estimates: ~200 local requests/day (avg 2K tokens each) = 400K tok/day = 12M tok/month → $0 local
+  // ~30 cloud reasoning calls/day (avg 4K tokens each) = 120K tok/day = 3.6M tok/month
+  const cloudTokPerMonth = 3_600_000;
+  const cloudMonthlyCost = flashCost ? (flashCost * cloudTokPerMonth / 1_000_000) : 4.14;
+  const electricityCost = 8; // ~150W * 18h/day * 30 days ≈ 81 kWh @ $0.10/kWh
+
+  container.innerHTML = `
+    <h2>🏗️ Recommended Hybrid Agent Architecture</h2>
+    <p class="arch-subtitle">Mac Studio M4 Ultra 512GB — Local-first AI agent with strategic cloud offloading</p>
+
+    <div class="arch-diagram">
+      <div class="arch-tier arch-tier-local">
+        <h3>🖥️ Local Tier — Primary Execution</h3>
+        <div class="arch-tier-item">
+          <span class="arch-model">${shortName(llama)}</span>
+          <span><span class="arch-badge arch-badge-score">Score ${llamaScore}</span></span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">Quantization: ${llamaEst.quant} · VRAM: ${llamaEst.memGB} GB · ~${llamaEst.tps} tok/s</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">✅ Tool calls & code generation</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">✅ Email triage & drafting</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">✅ Structured output (JSON, Notion API)</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">✅ Routine chat & instruction following</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">~200 requests/day · $0 per token</span>
+        </div>
+      </div>
+
+      <div class="arch-arrow">
+        <div class="arch-arrow-label">Router</div>
+        <div class="arch-arrow-line"></div>
+        <div class="arch-arrow-label">Complexity<br>threshold</div>
+      </div>
+
+      <div class="arch-tier arch-tier-cloud">
+        <h3>☁️ Cloud Tier — Complex Reasoning</h3>
+        <div class="arch-tier-item">
+          <span class="arch-model">${shortName(flash)}</span>
+          <span><span class="arch-badge arch-badge-score">Score ${flashScore}</span> <span class="arch-badge arch-badge-cost">$${flashCost ? flashCost.toFixed(2) : '1.15'}/M tok</span></span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">⚡ Multi-step planning & orchestration</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">⚡ Complex judgment & analysis</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">⚡ Long-context synthesis (100K+ tokens)</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">⚡ Fallback for tasks exceeding local quality</span>
+        </div>
+        <div class="arch-tier-item">
+          <span class="arch-detail">~30 requests/day · Pay-per-token via API</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-row">
+      <div>
+        <div class="arch-sub">💰 Estimated Monthly Cost</div>
+        <table class="arch-cost-table">
+          <thead><tr><th>Component</th><th>Usage</th><th>Cost</th></tr></thead>
+          <tbody>
+            <tr><td>Local inference (${shortName(llama)})</td><td>~200 req/day · 12M tok/mo</td><td>$0.00</td></tr>
+            <tr><td>Electricity (~150W avg)</td><td>~81 kWh/month</td><td>~$${electricityCost}</td></tr>
+            <tr><td>Cloud API (${shortName(flash)})</td><td>~30 req/day · 3.6M tok/mo</td><td>~$${cloudMonthlyCost.toFixed(2)}</td></tr>
+            <tr><td><strong>Total</strong></td><td></td><td><strong>~$${(electricityCost + cloudMonthlyCost).toFixed(2)}/mo</strong></td></tr>
+          </tbody>
+        </table>
+        <p class="arch-note">vs. ~$${((12_000_000 + 3_600_000) * (costPerMTok["anthropic/claude-sonnet-4"] || 7.11) / 1_000_000).toFixed(0)}/mo running everything on Claude Sonnet 4 cloud API</p>
+      </div>
+
+      <div>
+        <div class="arch-sub">🔒 Privacy-Aware Offloading</div>
+        <ul class="arch-privacy">
+          <li class="priv-green"><span class="priv-icon">🟢</span><span class="priv-label">Safe for Cloud</span><span>Public data lookups, general reasoning, code review on open-source, web search synthesis</span></li>
+          <li class="priv-yellow"><span class="priv-icon">🟡</span><span class="priv-label">Anonymize First</span><span>Meeting summaries (strip names), analytics queries, error logs (redact IPs/tokens)</span></li>
+          <li class="priv-red"><span class="priv-icon">🔴</span><span class="priv-label">Local Only</span><span>Private emails, credentials, personal data, internal docs, financial records, auth tokens</span></li>
+        </ul>
+        <p class="arch-note">Route all red-tier tasks to local model regardless of complexity. Yellow-tier tasks can go to cloud after automated PII scrubbing.</p>
+      </div>
+    </div>
+  `;
+}
+
 main();
