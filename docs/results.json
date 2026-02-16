@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-16T19:37:04.992649+00:00",
+  "timestamp": "2026-02-16T20:45:16.412406+00:00",
   "version": "1.0",
   "results": [
     {
@@ -3166,6 +3166,181 @@
       },
       "cost": 0.000176,
       "duration_s": 2.92
+    },
+    {
+      "model": "anthropic/claude-sonnet-4.5",
+      "scenario": "email_triage",
+      "score": 97,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "# Email Triage Results\n\n## \ud83d\udd34 URGENT (3 emails)\n\n**Email 1** \u2014 Security alert: Unusual login attempts\n**Why urgent:** Active security incident with locked admin account\n\n**Draft Response:**\n```\nTo: security@defuse.org\nSubject: RE: CRITICAL: Unusual login attempts detected\n\nThis was NOT authorized activity. Please:\n1. Keep the account locked\n2. Add IP 203.0.113.42 to blocklist immediately\n3. Audit all admin accounts for any successful logins in the past 24h\n4. Send me the full access logs for revi",
+      "usage": {
+        "prompt_tokens": 779,
+        "completion_tokens": 644,
+        "total_tokens": 1423,
+        "cost": 0.011997,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.011997,
+          "upstream_inference_prompt_cost": 0.002337,
+          "upstream_inference_completions_cost": 0.00966
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "cost": 0.011997,
+      "duration_s": 15.14
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "scenario": "email_triage",
+      "score": 97,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "### Email 1 \u2014 \ud83d\udd34 Urgent  \n**Reason:** Possible security incident (brute-force attempts on admin); account lockout needs immediate verification + follow-up actions.\n\n**Draft response:**  \nSubject: Re: CRITICAL: Unusual login attempts detected  \nHi Security Team,  \nThanks for the alert. This activity was **not authorized** on my end. Please keep the admin account locked and block IP **203.0.113.42** (and any related IPs if applicable). I\u2019m rotating credentials and will review recent auth/audit logs",
+      "usage": {
+        "prompt_tokens": 701,
+        "completion_tokens": 663,
+        "total_tokens": 1364,
+        "cost": 0.01050875,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.01050875,
+          "upstream_inference_prompt_cost": 0.00122675,
+          "upstream_inference_completions_cost": 0.009282
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 99,
+          "image_tokens": 0
+        }
+      },
+      "cost": 0.010509,
+      "duration_s": 10.12
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "scenario": "email_triage",
+      "score": 97,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "**Classification**\n\n| # | Email | Urgency | Reason |\n|---|-------|---------|--------|\n| 1 | \u201cCRITICAL: Unusual login attempts detected\u201d | \ud83d\udd34 **Urgent** | Possible security breach; admin account locked. Needs immediate verification and action. |\n| 2 | \u201cSprint planning prep\u201d | \ud83d\udfe1 **Important** | Needs review before Monday\u2019s meeting, but not time\u2011critical today. |\n| 3 | \u201cDependabot: 3 new security advisories\u201d | \ud83d\udfe1 **Important** | Security\u2011related dependency updates; should be handled today but not an ",
+      "usage": {
+        "prompt_tokens": 731,
+        "completion_tokens": 1006,
+        "total_tokens": 1737,
+        "cost": 0.000219649,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.000219649,
+          "upstream_inference_prompt_cost": 2.8509e-05,
+          "upstream_inference_completions_cost": 0.00019114
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 253,
+          "audio_tokens": 0
+        }
+      },
+      "cost": 0.00022,
+      "duration_s": 16.58
+    },
+    {
+      "model": "qwen/qwen3-30b-a3b",
+      "scenario": "email_triage",
+      "score": 92,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 85
+      },
+      "response_preview": "### Classified Emails:\n**\ud83d\udd34 Urgent**  \n1. **Email 1** \u2014 Security alert (unauthorized login attempts)  \n6. **Email 6** \u2014 Investor metrics deadline (board meeting tomorrow)  \n9. **Email 9** \u2014 Demo environment outage (client presentation in 2 hours)  \n\n**\ud83d\udfe1 Important**  \n2. **Email 2** \u2014 Sprint planning review (deadline Monday)  \n3. **Email 3** \u2014 Security advisories (dependencies need attention)  \n4. **Email 4** \u2014 DB storage warning (cleanup needed this week)  \n7. **Email 7** \u2014 Performance review dea",
+      "usage": {
+        "prompt_tokens": 729,
+        "completion_tokens": 1370,
+        "total_tokens": 2099,
+        "cost": 0.00044192,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00044192,
+          "upstream_inference_prompt_cost": 5.832e-05,
+          "upstream_inference_completions_cost": 0.0003836
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1043,
+          "audio_tokens": 0
+        }
+      },
+      "cost": 0.000345,
+      "duration_s": 53.01
+    },
+    {
+      "model": "google/gemini-3-pro-preview",
+      "scenario": "email_triage",
+      "score": 97,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "Here is the triage of your inbox, Alex. I have prioritized the 10 emails based on your criteria and drafted responses for the items requiring immediate action.\n\n### \ud83d\udd34 Urgent (Immediate Action Required)\n\n**Email 1: Security Alert (Unusual login attempts)**\n*Reason: Potential active security breach on an admin account.*\n> **Draft Response:**\n> \"Confirming that this activity was **NOT** authorized. Please keep the account locked and terminate any active sessions immediately. I will contact you via ",
+      "usage": {
+        "prompt_tokens": 751,
+        "completion_tokens": 2150,
+        "total_tokens": 2901,
+        "cost": 0.027302,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.027302,
+          "upstream_inference_prompt_cost": 0.001502,
+          "upstream_inference_completions_cost": 0.0258
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1600,
+          "image_tokens": 0
+        }
+      },
+      "cost": 0.027302,
+      "duration_s": 22.57
     }
   ],
   "summary": {
@@ -3349,11 +3524,46 @@
           "tool_orchestration": 92
         },
         "total_cost": 0.001138
+      },
+      "anthropic/claude-sonnet-4.5": {
+        "average_score": 97.0,
+        "scores": {
+          "email_triage": 97
+        },
+        "total_cost": 0.011997
+      },
+      "openai/gpt-5.2": {
+        "average_score": 97.0,
+        "scores": {
+          "email_triage": 97
+        },
+        "total_cost": 0.010509
+      },
+      "openai/gpt-oss-120b": {
+        "average_score": 97.0,
+        "scores": {
+          "email_triage": 97
+        },
+        "total_cost": 0.00022
+      },
+      "qwen/qwen3-30b-a3b": {
+        "average_score": 92.0,
+        "scores": {
+          "email_triage": 92
+        },
+        "total_cost": 0.000345
+      },
+      "google/gemini-3-pro-preview": {
+        "average_score": 97.0,
+        "scores": {
+          "email_triage": 97
+        },
+        "total_cost": 0.027302
       }
     },
     "scenarios": {
       "email_triage": {
-        "average_score": 94.0,
+        "average_score": 94.5,
         "best_model": "anthropic/claude-sonnet-4",
         "best_score": 97
       },
@@ -3386,76 +3596,101 @@
     "ranking": [
       {
         "rank": 1,
+        "model": "anthropic/claude-sonnet-4.5",
+        "average": 97.0
+      },
+      {
+        "rank": 2,
+        "model": "openai/gpt-5.2",
+        "average": 97.0
+      },
+      {
+        "rank": 3,
+        "model": "openai/gpt-oss-120b",
+        "average": 97.0
+      },
+      {
+        "rank": 4,
+        "model": "google/gemini-3-pro-preview",
+        "average": 97.0
+      },
+      {
+        "rank": 5,
         "model": "google/gemini-2.5-pro",
         "average": 95.7
       },
       {
-        "rank": 2,
+        "rank": 6,
         "model": "google/gemini-2.5-flash",
         "average": 95.7
       },
       {
-        "rank": 3,
+        "rank": 7,
         "model": "moonshotai/kimi-k2.5",
         "average": 95.7
       },
       {
-        "rank": 4,
+        "rank": 8,
         "model": "anthropic/claude-opus-4",
         "average": 93.5
       },
       {
-        "rank": 5,
+        "rank": 9,
         "model": "anthropic/claude-sonnet-4",
         "average": 93.2
       },
       {
-        "rank": 6,
+        "rank": 10,
+        "model": "qwen/qwen3-30b-a3b",
+        "average": 92.0
+      },
+      {
+        "rank": 11,
         "model": "openai/gpt-4o",
         "average": 91.8
       },
       {
-        "rank": 7,
+        "rank": 12,
         "model": "qwen/qwen-2.5-72b-instruct",
         "average": 91.8
       },
       {
-        "rank": 8,
+        "rank": 13,
         "model": "meta-llama/llama-3.3-70b-instruct",
         "average": 91.8
       },
       {
-        "rank": 9,
+        "rank": 14,
         "model": "openai/o3",
         "average": 90.7
       },
       {
-        "rank": 10,
+        "rank": 15,
         "model": "openai/gpt-4o-mini",
         "average": 87.3
       },
       {
-        "rank": 11,
+        "rank": 16,
         "model": "meta-llama/llama-4-maverick",
         "average": 86.0
       },
       {
-        "rank": 12,
+        "rank": 17,
         "model": "openai/o4-mini",
         "average": 85.2
       },
       {
-        "rank": 13,
+        "rank": 18,
         "model": "minimax/minimax-m1",
         "average": 83.0
       },
       {
-        "rank": 14,
+        "rank": 19,
         "model": "deepseek/deepseek-chat-v3-0324",
         "average": 78.8
       },
       {
-        "rank": 15,
+        "rank": 20,
         "model": "deepseek/deepseek-r1-0528",
         "average": 76.7
       }

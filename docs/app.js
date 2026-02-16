@@ -6,7 +6,7 @@ const COLORS = [
   "#e879f9","#fbbf24",
 ];
 
-const OPEN_WEIGHT_PREFIXES = ["meta-llama/", "qwen/", "deepseek/", "mistral/", "moonshotai/", "minimax/"];
+const OPEN_WEIGHT_PREFIXES = ["meta-llama/", "qwen/", "deepseek/", "mistral/", "moonshotai/", "minimax/", "openai/gpt-oss-"];
 const MAC_STUDIO_MODELS = [
   "meta-llama/llama-3.3-70b-instruct",
   "meta-llama/llama-4-maverick",
@@ -15,6 +15,8 @@ const MAC_STUDIO_MODELS = [
   "deepseek/deepseek-r1-0528",
   "moonshotai/kimi-k2.5",
   "minimax/minimax-m1",
+  "qwen/qwen3-30b-a3b",
+  "openai/gpt-oss-120b",
 ];
 
 const MAC_STUDIO_ESTIMATES = {
@@ -25,6 +27,8 @@ const MAC_STUDIO_ESTIMATES = {
   "deepseek/deepseek-r1-0528": { quant: "Q4_K_M", memGB: 350, tps: 17, qualityRetention: 93 },
   "moonshotai/kimi-k2.5": { quant: "Q3_K_M", memGB: 480, tps: 15, qualityRetention: 90 },
   "minimax/minimax-m1": { quant: "Q8", memGB: 460, tps: 14, qualityRetention: 99 },
+  "qwen/qwen3-30b-a3b": { quant: "FP16", memGB: 60, tps: 35, qualityRetention: 100 },
+  "openai/gpt-oss-120b": { quant: "Q4_K_M", memGB: 70, tps: 20, qualityRetention: 95 },
 };
 
 const NEAR_AI_PRICING = {
@@ -169,6 +173,7 @@ function renderAll() {
   renderTable(models, scenarios, summary, data._tokPerSec, data._costPerMTok);
   renderRadar(models, scenarios, summary);
   renderBarChart(models, data._tokPerSec);
+  renderArchitectureGuide(summary, data._costPerMTok, data._tokPerSec);
   renderRecommendations(allModels, summary, data._costPerMTok);
   renderMatrix(models, scenarios, summary);
 }
