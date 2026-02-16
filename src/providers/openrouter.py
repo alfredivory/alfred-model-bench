@@ -20,7 +20,7 @@ class OpenRouterProvider:
                 "HTTP-Referer": "https://github.com/alfredivory/alfred-model-bench",
                 "X-Title": "Alfred Model Bench",
             },
-            timeout=120.0,
+            timeout=600.0,
         )
 
     def complete(
