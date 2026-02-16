@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-16T21:05:37.707045+00:00",
+  "timestamp": "2026-02-16T21:10:10.912344+00:00",
   "version": "1.0",
   "results": [
     {
@@ -3552,16 +3552,6 @@
     },
     {
       "model": "google/gemini-3-pro-preview",
-      "scenario": "judgment_calls",
-      "score": 0,
-      "error": "Client error '401 Unauthorized' for url 'https://openrouter.ai/api/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
-      "details": {},
-      "usage": {},
-      "cost": 0,
-      "duration_s": 5.012113094329834
-    },
-    {
-      "model": "google/gemini-3-pro-preview",
       "scenario": "long_context",
       "score": 96,
       "details": {
@@ -4188,6 +4178,43 @@
       },
       "cost": 0.000549,
       "duration_s": 28.58
+    },
+    {
+      "model": "google/gemini-3-pro-preview",
+      "scenario": "judgment_calls",
+      "score": 97,
+      "details": {
+        "binary_decision": {
+          "correct": 5,
+          "total": 5
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "**Scenario 1**\n1. Decision: SILENT\n2. Response: N/A\n3. Reasoning: This is a routine status update and acknowledgement between humans where I cannot add value.\n\n**Scenario 2**\n1. Decision: SPEAK\n2. Response: It is scheduled for 2:00 PM EST.\n3. Reasoning: Although Mike answered, I was directly addressed and can provide a definitive confirmation rather than his uncertain \"I think.\"\n\n**Scenario 3**\n1. Decision: SPEAK\n2. Response: Production is currently running PostgreSQL 16.2.\n3. Reasoning: The hum",
+      "usage": {
+        "prompt_tokens": 416,
+        "completion_tokens": 791,
+        "total_tokens": 1207,
+        "cost": 0.010324,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.010324,
+          "upstream_inference_prompt_cost": 0.000832,
+          "upstream_inference_completions_cost": 0.009492
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 522,
+          "image_tokens": 0
+        }
+      },
+      "cost": 0.010324,
+      "duration_s": 9.95
     }
   ],
   "summary": {
@@ -4421,16 +4448,16 @@
         "total_cost": 0.001934
       },
       "google/gemini-3-pro-preview": {
-        "average_score": 75.0,
+        "average_score": 91.2,
         "scores": {
           "email_triage": 97,
           "instruction_following": 92,
-          "judgment_calls": 0,
           "long_context": 96,
           "structured_output": 100,
-          "tool_orchestration": 65
+          "tool_orchestration": 65,
+          "judgment_calls": 97
         },
-        "total_cost": 0.128502
+        "total_cost": 0.138826
       }
     },
     "scenarios": {
@@ -4445,7 +4472,7 @@
         "best_score": 97
       },
       "judgment_calls": {
-        "average_score": 88.7,
+        "average_score": 93.5,
         "best_model": "anthropic/claude-opus-4",
         "best_score": 97
       },
@@ -4523,48 +4550,48 @@
       },
       {
         "rank": 12,
+        "model": "google/gemini-3-pro-preview",
+        "average": 91.2
+      },
+      {
+        "rank": 13,
         "model": "openai/o3",
         "average": 90.7
       },
       {
-        "rank": 13,
+        "rank": 14,
         "model": "openai/gpt-4o-mini",
         "average": 87.3
       },
       {
-        "rank": 14,
+        "rank": 15,
         "model": "qwen/qwen3-30b-a3b",
         "average": 86.3
       },
       {
-        "rank": 15,
+        "rank": 16,
         "model": "meta-llama/llama-4-maverick",
         "average": 86.0
       },
       {
-        "rank": 16,
+        "rank": 17,
         "model": "openai/o4-mini",
         "average": 85.2
       },
       {
-        "rank": 17,
+        "rank": 18,
         "model": "minimax/minimax-m1",
         "average": 83.0
       },
       {
-        "rank": 18,
+        "rank": 19,
         "model": "deepseek/deepseek-chat-v3-0324",
         "average": 78.8
       },
       {
-        "rank": 19,
+        "rank": 20,
         "model": "deepseek/deepseek-r1-0528",
         "average": 76.7
-      },
-      {
-        "rank": 20,
-        "model": "google/gemini-3-pro-preview",
-        "average": 75.0
       }
     ]
   }
