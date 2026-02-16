@@ -13,6 +13,7 @@
         <p id="meta"></p>
     </header>
     <main>
+        <div id="filters" class="filter-bar"></div>
         <section id="ranking">
             <h2>Model Rankings</h2>
             <table id="model-table">
@@ -24,6 +25,12 @@
             <h2>Radar Comparison</h2>
             <div class="chart-container">
                 <canvas id="radar-chart"></canvas>
+            </div>
+        </section>
+        <section id="bar-section">
+            <h2>Output Speed (Tokens/sec)</h2>
+            <div class="chart-container chart-container-bar">
+                <canvas id="bar-chart"></canvas>
             </div>
         </section>
         <section id="matrix-section">

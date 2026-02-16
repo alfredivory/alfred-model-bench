@@ -6,7 +6,55 @@ const COLORS = [
   "#e879f9","#fbbf24",
 ];
 
+const OPEN_WEIGHT_PREFIXES = ["meta-llama/", "qwen/", "deepseek/", "mistral/"];
+const MAC_STUDIO_MODELS = [
+  "meta-llama/llama-3.3-70b-instruct",
+  "meta-llama/llama-4-maverick",
+  "qwen/qwen-2.5-72b-instruct",
+  "deepseek/deepseek-chat-v3-0324",
+  "deepseek/deepseek-r1-0528",
+];
+
 let sortDir = {};
+let radarChart = null;
+let barChart = null;
+let globalData = null;
+let currentFilter = "all";
+
+function isOpenWeight(model) {
+  return OPEN_WEIGHT_PREFIXES.some(p => model.startsWith(p));
+}
+
+function isMacStudio(model) {
+  return MAC_STUDIO_MODELS.includes(model);
+}
+
+function filterModels(models) {
+  if (currentFilter === "open") return models.filter(isOpenWeight);
+  if (currentFilter === "mac") return models.filter(isMacStudio);
+  return models;
+}
+
+function shortName(id) {
+  return id.split("/").pop();
+}
+
+function modelTags(model) {
+  const tags = [];
+  if (isOpenWeight(model)) {
+    tags.push('<span class="tag tag-open">Open Weight</span>');
+    if (isMacStudio(model)) tags.push('<span class="tag tag-mac">Mac Studio OK</span>');
+  } else {
+    tags.push('<span class="tag tag-prop">Proprietary</span>');
+  }
+  return tags.join(" ");
+}
+
+function scoreClass(v) {
+  if (v >= 80) return "score-high";
+  if (v >= 50) return "score-mid";
+  return "score-low";
+}
 
 async function main() {
   let data;
@@ -17,27 +65,79 @@ async function main() {
     document.getElementById("meta").textContent = "Failed to load results. Run benchmarks first.";
     return;
   }
+  globalData = data;
 
   document.getElementById("meta").textContent =
     `Generated ${new Date(data.timestamp).toLocaleString()} — ${data.results.length} results`;
 
+  // Compute tokens/sec per model (avg across scenarios)
+  computeTokensPerSec(data);
+
+  renderFilters();
+  renderAll();
+}
+
+function computeTokensPerSec(data) {
+  data._tokPerSec = {};
+  const byModel = {};
+  for (const r of data.results) {
+    if (!byModel[r.model]) byModel[r.model] = [];
+    const ct = r.usage?.completion_tokens || 0;
+    const dur = r.duration_s || 0;
+    if (ct > 0 && dur > 0) byModel[r.model].push(ct / dur);
+  }
+  for (const [m, vals] of Object.entries(byModel)) {
+    data._tokPerSec[m] = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+  }
+}
+
+function renderFilters() {
+  const container = document.getElementById("filters");
+  const buttons = [
+    { id: "all", label: "All Models" },
+    { id: "open", label: "Open Weight Only" },
+    { id: "mac", label: "Mac Studio Runnable" },
+  ];
+  buttons.forEach(b => {
+    const btn = document.createElement("button");
+    btn.textContent = b.label;
+    btn.className = "filter-btn" + (b.id === currentFilter ? " active" : "");
+    btn.onclick = () => {
+      currentFilter = b.id;
+      container.querySelectorAll(".filter-btn").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+      renderAll();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function renderAll() {
+  const data = globalData;
   const summary = data.summary;
   const scenarios = Object.keys(summary.scenarios).sort();
-  const models = summary.ranking.map((r) => r.model);
+  const allModels = summary.ranking.map(r => r.model);
+  const models = filterModels(allModels);
 
-  renderTable(models, scenarios, summary);
+  // Clear existing
+  document.getElementById("table-head").innerHTML = "";
+  document.getElementById("table-body").innerHTML = "";
+  if (radarChart) { radarChart.destroy(); radarChart = null; }
+  if (barChart) { barChart.destroy(); barChart = null; }
+  document.getElementById("matrix-head").innerHTML = "";
+  document.getElementById("matrix-body").innerHTML = "";
+  sortDir = {};
+
+  renderTable(models, scenarios, summary, data._tokPerSec);
   renderRadar(models, scenarios, summary);
+  renderBarChart(models, data._tokPerSec);
   renderMatrix(models, scenarios, summary);
 }
 
-function shortName(id) {
-  return id.split("/").pop();
-}
-
 /* ── Table ── */
-function renderTable(models, scenarios, summary) {
+function renderTable(models, scenarios, summary, tokPerSec) {
   const head = document.getElementById("table-head");
-  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Cost ($)"];
+  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Cost ($)"];
   cols.forEach((c, i) => {
     const th = document.createElement("th");
     th.textContent = c;
@@ -50,19 +150,44 @@ function renderTable(models, scenarios, summary) {
   models.forEach((m, idx) => {
     const s = summary.models[m];
     const tr = document.createElement("tr");
-    const cells = [
-      idx + 1,
-      shortName(m),
-      ...scenarios.map((sc) => s.scores[sc] ?? "—"),
-      s.average_score,
-      s.total_cost.toFixed(4),
-    ];
-    cells.forEach((v) => {
+
+    // Rank
+    const tdRank = document.createElement("td");
+    tdRank.textContent = idx + 1;
+    tr.appendChild(tdRank);
+
+    // Model name + tags
+    const tdModel = document.createElement("td");
+    tdModel.innerHTML = `<span class="model-name">${shortName(m)}</span> ${modelTags(m)}`;
+    tdModel.style.textAlign = "left";
+    tr.appendChild(tdModel);
+
+    // Scenario scores
+    scenarios.forEach(sc => {
+      const v = s.scores[sc] ?? "—";
       const td = document.createElement("td");
       td.textContent = v;
       if (typeof v === "number" && v <= 100 && v >= 0) td.classList.add(scoreClass(v));
       tr.appendChild(td);
     });
+
+    // Average
+    const tdAvg = document.createElement("td");
+    tdAvg.textContent = s.average_score;
+    if (typeof s.average_score === "number") tdAvg.classList.add(scoreClass(s.average_score));
+    tr.appendChild(tdAvg);
+
+    // Tokens/sec
+    const tdTok = document.createElement("td");
+    const tps = tokPerSec[m] || 0;
+    tdTok.textContent = tps.toFixed(1);
+    tr.appendChild(tdTok);
+
+    // Cost
+    const tdCost = document.createElement("td");
+    tdCost.textContent = s.total_cost.toFixed(4);
+    tr.appendChild(tdCost);
+
     body.appendChild(tr);
   });
 }
@@ -81,12 +206,6 @@ function sortTable(colIdx) {
   rows.forEach((r) => body.appendChild(r));
 }
 
-function scoreClass(v) {
-  if (v >= 80) return "score-high";
-  if (v >= 50) return "score-mid";
-  return "score-low";
-}
-
 /* ── Radar ── */
 function renderRadar(models, scenarios, summary) {
   const datasets = models.map((m, i) => ({
@@ -97,17 +216,44 @@ function renderRadar(models, scenarios, summary) {
     pointRadius: 3,
   }));
 
-  new Chart(document.getElementById("radar-chart"), {
+  radarChart = new Chart(document.getElementById("radar-chart"), {
     type: "radar",
-    data: {
-      labels: scenarios.map((s) => s.replace(/_/g, " ")),
-      datasets,
-    },
+    data: { labels: scenarios.map(s => s.replace(/_/g, " ")), datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, color: "#888" }, grid: { color: "#333" }, pointLabels: { color: "#ccc" } } },
       plugins: { legend: { labels: { color: "#ccc", boxWidth: 12 } } },
+    },
+  });
+}
+
+/* ── Bar Chart (Tokens/sec) ── */
+function renderBarChart(models, tokPerSec) {
+  const ctx = document.getElementById("bar-chart");
+  const data = models.map(m => tokPerSec[m] || 0);
+
+  barChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: models.map(shortName),
+      datasets: [{
+        label: "Output Tokens/sec",
+        data,
+        backgroundColor: models.map((_, i) => COLORS[i % COLORS.length] + "cc"),
+        borderColor: models.map((_, i) => COLORS[i % COLORS.length]),
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: "y",
+      scales: {
+        x: { grid: { color: "#333" }, ticks: { color: "#ccc" } },
+        y: { grid: { color: "#333" }, ticks: { color: "#ccc", font: { size: 11 } } },
+      },
+      plugins: { legend: { display: false } },
     },
   });
 }
@@ -125,7 +271,6 @@ function renderMatrix(models, scenarios, summary) {
   });
 
   const body = document.getElementById("matrix-body");
-  // Find best per scenario
   const best = {};
   scenarios.forEach((s) => {
     best[s] = Math.max(...models.map((m) => summary.models[m].scores[s] ?? 0));
@@ -140,7 +285,6 @@ function renderMatrix(models, scenarios, summary) {
       const v = summary.models[m].scores[s] ?? 0;
       const td = document.createElement("td");
       td.textContent = v;
-      // Color: green if best, yellow if within 10, red if low
       if (v === best[s]) td.className = "rec-best";
       else if (v >= best[s] - 10) td.className = "rec-good";
       else if (v >= 50) td.className = "rec-ok";

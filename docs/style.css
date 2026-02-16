@@ -20,4 +20,14 @@ tr:hover { background: #1e2230; }
 .rec-ok { background: #2a2d3a; }
 .rec-poor { background: #3b1010; color: #fca5a5; }
 .chart-container { height: 500px; max-width: 800px; margin: 0 auto; }
+.filter-bar { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.filter-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: .5rem 1.1rem; font-size: .85rem; cursor: pointer; transition: all .15s; }
+.filter-btn:hover { background: #1e2230; border-color: #93c5fd; }
+.filter-btn.active { background: #1e3a5f; border-color: #93c5fd; color: #93c5fd; font-weight: 600; }
+.tag { display: inline-block; font-size: .65rem; padding: .1rem .45rem; border-radius: 4px; margin-left: .35rem; font-weight: 600; vertical-align: middle; }
+.tag-open { background: #064e3b; color: #6ee7b7; }
+.tag-prop { background: #3b2560; color: #c4b5fd; }
+.tag-mac { background: #1e3a5f; color: #67e8f9; }
+.model-name { font-weight: 500; }
+.chart-container-bar { height: 400px; max-width: 900px; margin: 0 auto; }
 @media (max-width: 768px) { body { padding: 1rem; } .chart-container { height: 350px; } table { font-size: .75rem; } th, td { padding: .35rem .5rem; } }
