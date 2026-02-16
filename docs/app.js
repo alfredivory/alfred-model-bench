@@ -84,6 +84,7 @@ async function main() {
 
   // Compute tokens/sec per model (avg across scenarios)
   computeTokensPerSec(data);
+  computeCostPerMTok(data);
 
   renderFilters();
   renderAll();
@@ -124,6 +125,21 @@ function renderFilters() {
   });
 }
 
+function computeCostPerMTok(data) {
+  data._costPerMTok = {};
+  const byModel = {};
+  for (const r of data.results) {
+    if (!byModel[r.model]) byModel[r.model] = { cost: 0, tokens: 0 };
+    byModel[r.model].cost += r.cost || 0;
+    const pt = r.usage?.prompt_tokens || 0;
+    const ct = r.usage?.completion_tokens || 0;
+    byModel[r.model].tokens += pt + ct;
+  }
+  for (const [m, v] of Object.entries(byModel)) {
+    data._costPerMTok[m] = v.tokens > 0 && v.cost > 0 ? (v.cost / v.tokens) * 1_000_000 : null;
+  }
+}
+
 function renderAll() {
   const data = globalData;
   const summary = data.summary;
@@ -140,16 +156,16 @@ function renderAll() {
   document.getElementById("matrix-body").innerHTML = "";
   sortDir = {};
 
-  renderTable(models, scenarios, summary, data._tokPerSec);
+  renderTable(models, scenarios, summary, data._tokPerSec, data._costPerMTok);
   renderRadar(models, scenarios, summary);
   renderBarChart(models, data._tokPerSec);
   renderMatrix(models, scenarios, summary);
 }
 
 /* ── Table ── */
-function renderTable(models, scenarios, summary, tokPerSec) {
+function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
   const head = document.getElementById("table-head");
-  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Est. Local TPS ¹", "Cost ($)"];
+  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Est. Local TPS ¹", "$/1M tok"];
   cols.forEach((c, i) => {
     const th = document.createElement("th");
     th.textContent = c;
@@ -200,9 +216,10 @@ function renderTable(models, scenarios, summary, tokPerSec) {
     tdLocal.textContent = EST_LOCAL_TPS[m] || "—";
     tr.appendChild(tdLocal);
 
-    // Cost
+    // Cost per 1M tokens
     const tdCost = document.createElement("td");
-    tdCost.textContent = s.total_cost.toFixed(4);
+    const cpm = costPerMTok[m];
+    tdCost.textContent = cpm != null ? `$${cpm.toFixed(2)}/1M` : "—";
     tr.appendChild(tdCost);
 
     body.appendChild(tr);
