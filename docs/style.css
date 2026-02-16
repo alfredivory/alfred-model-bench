@@ -89,3 +89,8 @@ tr:hover { background: #1e2230; }
 .arch-badge-cost { background: #1e3a5f; color: #67e8f9; }
 @media (max-width: 768px) { .arch-diagram { grid-template-columns: 1fr; } .arch-arrow { flex-direction: row; padding: .5rem 0; min-width: unset; } .arch-arrow-line { width: auto; height: 2px; flex: 1; margin: 0 .5rem; background: linear-gradient(to right, #6ee7b7, #93c5fd); } .arch-row { grid-template-columns: 1fr; } }
 @media (max-width: 768px) { body { padding: 1rem; } .chart-container { height: 350px; } table { font-size: .75rem; } th, td { padding: .35rem .5rem; } }
+
+.arch-highlight td { background: rgba(110, 231, 183, 0.1); }
+.arch-separator td { border: none; height: 8px; }
+.cost-bad { color: #fca5a5; font-weight: 600; }
+

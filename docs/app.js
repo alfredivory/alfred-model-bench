@@ -458,24 +458,56 @@ function renderArchitectureGuide(summary, costPerMTok, tokPerSec) {
   // Pull real data
   const llama = "meta-llama/llama-3.3-70b-instruct";
   const flash = "google/gemini-2.5-flash";
+  const sonnet = "anthropic/claude-sonnet-4";
+  const opus = "anthropic/claude-opus-4";
   const llamaScore = summary.models[llama]?.average_score || 91.8;
   const flashScore = summary.models[flash]?.average_score || 95.7;
   const llamaEst = MAC_STUDIO_ESTIMATES[llama];
   const flashCost = costPerMTok[flash];
 
-  // Cost estimates: ~200 local requests/day (avg 2K tokens each) = 400K tok/day = 12M tok/month → $0 local
-  // ~30 cloud reasoning calls/day (avg 4K tokens each) = 120K tok/day = 3.6M tok/month
-  const cloudTokPerMonth = 3_600_000;
-  const cloudMonthlyCost = flashCost ? (flashCost * cloudTokPerMonth / 1_000_000) : 4.14;
-  const electricityCost = 8; // ~150W * 18h/day * 30 days ≈ 81 kWh @ $0.10/kWh
+  // 24/7 heavy agent usage model:
+  // ~720 requests/day (1 every 2 min), running market research, competitor analysis,
+  // task enrichment, email triage, calendar management, coding, proactive monitoring
+  // 670 light requests: ~3K input + 1.5K output = 3.015M input + 1.005M output / day
+  // 50 heavy requests: ~20K input + 4K output = 1M input + 0.2M output / day
+  // Total: ~4M input + 1.2M output / day = ~126M tokens/month
+  const dailyInputTok = 4_010_000;
+  const dailyOutputTok = 1_205_000;
+  const monthlyInputTok = dailyInputTok * 30;
+  const monthlyOutputTok = dailyOutputTok * 30;
+  const monthlyTotalTok = monthlyInputTok + monthlyOutputTok;
+
+  // Hybrid split: 90% local (routine), 10% cloud (complex reasoning)
+  const localPct = 0.90;
+  const cloudPct = 0.10;
+  const localReqDay = 650;
+  const cloudReqDay = 70;
+  const cloudMonthlyInput = dailyInputTok * cloudPct * 30;
+  const cloudMonthlyOutput = dailyOutputTok * cloudPct * 30;
+
+  // Cost calculations using actual benchmark pricing data
+  // Flash pricing: input $0.15/M, output $0.60/M (OpenRouter)
+  const flashInputPrice = 0.15;
+  const flashOutputPrice = 0.60;
+  const cloudMonthlyCost = (cloudMonthlyInput * flashInputPrice + cloudMonthlyOutput * flashOutputPrice) / 1_000_000;
+  const electricityCost = 15; // ~200W * 24h/day * 30 days ≈ 144 kWh @ $0.10/kWh
+
+  // All-cloud comparison costs (full 24/7 volume)
+  // Sonnet 4: $3/M in, $15/M out
+  const sonnetMonthlyCost = (monthlyInputTok * 3.0 + monthlyOutputTok * 15.0) / 1_000_000;
+  // Opus 4: $15/M in, $75/M out
+  const opusMonthlyCost = (monthlyInputTok * 15.0 + monthlyOutputTok * 75.0) / 1_000_000;
+  // GPT-4o: $2.5/M in, $10/M out
+  const gpt4oMonthlyCost = (monthlyInputTok * 2.5 + monthlyOutputTok * 10.0) / 1_000_000;
 
   container.innerHTML = `
     <h2>🏗️ Recommended Hybrid Agent Architecture</h2>
-    <p class="arch-subtitle">Mac Studio M4 Ultra 512GB — Local-first AI agent with strategic cloud offloading</p>
+    <p class="arch-subtitle">Mac Studio M4 Ultra 512GB — 24/7 autonomous agent with strategic cloud offloading</p>
+    <p class="arch-subtitle" style="font-size:0.85rem;opacity:0.7">Based on heavy usage: ~720 requests/day, market research, competitor analysis, task enrichment, email triage, coding, proactive monitoring</p>
 
     <div class="arch-diagram">
       <div class="arch-tier arch-tier-local">
-        <h3>🖥️ Local Tier — Primary Execution</h3>
+        <h3>🖥️ Local Tier — 90% of Workload</h3>
         <div class="arch-tier-item">
           <span class="arch-model">${shortName(llama)}</span>
           <span><span class="arch-badge arch-badge-score">Score ${llamaScore}</span></span>
@@ -484,65 +516,69 @@ function renderArchitectureGuide(summary, costPerMTok, tokPerSec) {
           <span class="arch-detail">Quantization: ${llamaEst.quant} · VRAM: ${llamaEst.memGB} GB · ~${llamaEst.tps} tok/s</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">✅ Tool calls & code generation</span>
+          <span class="arch-detail">✅ Tool calls, code generation, structured output</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">✅ Email triage & drafting</span>
+          <span class="arch-detail">✅ Email triage, calendar management, task enrichment</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">✅ Structured output (JSON, Notion API)</span>
+          <span class="arch-detail">✅ Market research & competitor monitoring</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">✅ Routine chat & instruction following</span>
+          <span class="arch-detail">✅ Private data processing (emails, credentials, internal docs)</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">~200 requests/day · $0 per token</span>
+          <span class="arch-detail">~${localReqDay} requests/day · $0 per token · 24/7 operation</span>
         </div>
       </div>
 
       <div class="arch-arrow">
         <div class="arch-arrow-label">Router</div>
         <div class="arch-arrow-line"></div>
-        <div class="arch-arrow-label">Complexity<br>threshold</div>
+        <div class="arch-arrow-label">Complexity /<br>Quality gate</div>
       </div>
 
       <div class="arch-tier arch-tier-cloud">
-        <h3>☁️ Cloud Tier — Complex Reasoning</h3>
+        <h3>☁️ Cloud Tier — 10% Complex Tasks</h3>
         <div class="arch-tier-item">
           <span class="arch-model">${shortName(flash)}</span>
-          <span><span class="arch-badge arch-badge-score">Score ${flashScore}</span> <span class="arch-badge arch-badge-cost">OpenRouter: $${flashCost ? flashCost.toFixed(2) : '1.15'}/M tok</span></span>
+          <span><span class="arch-badge arch-badge-score">Score ${flashScore}</span> <span class="arch-badge arch-badge-cost">OpenRouter: $${flashCost ? flashCost.toFixed(2) : '0.38'}/M tok avg</span></span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">⚡ Multi-step planning & orchestration</span>
+          <span class="arch-detail">⚡ Multi-step planning, deep analysis, judgment calls</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">⚡ Complex judgment & analysis</span>
+          <span class="arch-detail">⚡ Long-context synthesis (100K+ token documents)</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">⚡ Long-context synthesis (100K+ tokens)</span>
+          <span class="arch-detail">⚡ Complex code review & architecture decisions</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">⚡ Fallback for tasks exceeding local quality</span>
+          <span class="arch-detail">⚡ Tasks where quality delta justifies cloud cost</span>
         </div>
         <div class="arch-tier-item">
-          <span class="arch-detail">~30 requests/day · Pay-per-token via API</span>
+          <span class="arch-detail">~${cloudReqDay} requests/day · Pay-per-token via OpenRouter</span>
         </div>
       </div>
     </div>
 
     <div class="arch-row">
       <div>
-        <div class="arch-sub">💰 Estimated Monthly Cost</div>
+        <div class="arch-sub">💰 Monthly Cost — 24/7 Heavy Agent (~${(monthlyTotalTok/1e6).toFixed(0)}M tokens/month)</div>
         <table class="arch-cost-table">
-          <thead><tr><th>Component</th><th>Usage</th><th>Cost</th></tr></thead>
+          <thead><tr><th>Setup</th><th>Usage</th><th>Monthly Cost</th></tr></thead>
           <tbody>
-            <tr><td>Local inference (${shortName(llama)})</td><td>~200 req/day · 12M tok/mo</td><td>$0.00</td></tr>
-            <tr><td>Electricity (~150W avg)</td><td>~81 kWh/month</td><td>~$${electricityCost}</td></tr>
-            <tr><td>Cloud API via OpenRouter (${shortName(flash)})</td><td>~30 req/day · 3.6M tok/mo</td><td>~$${cloudMonthlyCost.toFixed(2)}</td></tr>
-            <tr><td><strong>Total</strong></td><td></td><td><strong>~$${(electricityCost + cloudMonthlyCost).toFixed(2)}/mo</strong></td></tr>
+            <tr class="arch-highlight"><td><strong>⭐ Hybrid (Local + Flash)</strong></td><td>90% local / 10% cloud</td><td><strong>~$${(electricityCost + cloudMonthlyCost).toFixed(0)}/mo</strong></td></tr>
+            <tr><td>├ Local inference (${shortName(llama)})</td><td>${localReqDay} req/day · ${(monthlyTotalTok * localPct / 1e6).toFixed(0)}M tok/mo</td><td>$0</td></tr>
+            <tr><td>├ Electricity (~200W, 24/7)</td><td>~144 kWh/month</td><td>~$${electricityCost}</td></tr>
+            <tr><td>└ Cloud API (${shortName(flash)})</td><td>${cloudReqDay} req/day · ${(monthlyTotalTok * cloudPct / 1e6).toFixed(0)}M tok/mo</td><td>~$${cloudMonthlyCost.toFixed(0)}</td></tr>
+            <tr class="arch-separator"><td colspan="3"></td></tr>
+            <tr><td>☁️ All-cloud: Claude Sonnet 4</td><td>720 req/day · ${(monthlyTotalTok/1e6).toFixed(0)}M tok/mo</td><td class="cost-bad">~$${sonnetMonthlyCost.toFixed(0)}/mo (~$${(sonnetMonthlyCost/30).toFixed(0)}/day)</td></tr>
+            <tr><td>☁️ All-cloud: Claude Opus 4</td><td>720 req/day · ${(monthlyTotalTok/1e6).toFixed(0)}M tok/mo</td><td class="cost-bad">~$${opusMonthlyCost.toFixed(0)}/mo (~$${(opusMonthlyCost/30).toFixed(0)}/day)</td></tr>
+            <tr><td>☁️ All-cloud: GPT-4o</td><td>720 req/day · ${(monthlyTotalTok/1e6).toFixed(0)}M tok/mo</td><td class="cost-bad">~$${gpt4oMonthlyCost.toFixed(0)}/mo (~$${(gpt4oMonthlyCost/30).toFixed(0)}/day)</td></tr>
           </tbody>
         </table>
-        <p class="arch-note">vs. ~$${((12_000_000 + 3_600_000) * (costPerMTok["anthropic/claude-sonnet-4"] || 7.11) / 1_000_000).toFixed(0)}/mo running everything on Claude Sonnet 4 via OpenRouter</p>
+        <p class="arch-note">Hybrid saves <strong>~${((1 - (electricityCost + cloudMonthlyCost) / sonnetMonthlyCost) * 100).toFixed(0)}%</strong> vs Sonnet 4 all-cloud and <strong>~${((1 - (electricityCost + cloudMonthlyCost) / opusMonthlyCost) * 100).toFixed(0)}%</strong> vs Opus 4 all-cloud</p>
       </div>
 
       <div>
