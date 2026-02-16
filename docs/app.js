@@ -17,14 +17,14 @@ const MAC_STUDIO_MODELS = [
   "minimax/minimax-m1",
 ];
 
-const EST_LOCAL_TPS = {
-  "meta-llama/llama-3.3-70b-instruct": "~22 (Q4)",
-  "meta-llama/llama-4-maverick": "~15 (Q4)",
-  "qwen/qwen-2.5-72b-instruct": "~20 (Q4)",
-  "deepseek/deepseek-chat-v3-0324": "~19 (Q4)",
-  "deepseek/deepseek-r1-0528": "~17 (Q4)",
-  "moonshotai/kimi-k2.5": "~18 (Q4)",
-  "minimax/minimax-m1": "~16 (Q4)",
+const MAC_STUDIO_ESTIMATES = {
+  "meta-llama/llama-3.3-70b-instruct": { quant: "FP16", memGB: 140, tps: 8, qualityRetention: 100 },
+  "qwen/qwen-2.5-72b-instruct": { quant: "FP16", memGB: 144, tps: 8, qualityRetention: 100 },
+  "meta-llama/llama-4-maverick": { quant: "Q8", memGB: 400, tps: 12, qualityRetention: 99 },
+  "deepseek/deepseek-chat-v3-0324": { quant: "Q4_K_M", memGB: 350, tps: 19, qualityRetention: 93 },
+  "deepseek/deepseek-r1-0528": { quant: "Q4_K_M", memGB: 350, tps: 17, qualityRetention: 93 },
+  "moonshotai/kimi-k2.5": { quant: "Q3_K_M", memGB: 480, tps: 15, qualityRetention: 90 },
+  "minimax/minimax-m1": { quant: "Q8", memGB: 460, tps: 14, qualityRetention: 99 },
 };
 
 let sortDir = {};
@@ -165,7 +165,7 @@ function renderAll() {
 /* ── Table ── */
 function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
   const head = document.getElementById("table-head");
-  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Est. Local TPS ¹", "$/1M tok"];
+  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Best Quant ¹", "VRAM ¹", "Est. Local TPS ¹", "Est. Quality ¹", "$/1M tok"];
   cols.forEach((c, i) => {
     const th = document.createElement("th");
     th.textContent = c;
@@ -211,10 +211,27 @@ function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
     tdTok.textContent = tps.toFixed(1);
     tr.appendChild(tdTok);
 
+    // Best Quant
+    const est = MAC_STUDIO_ESTIMATES[m];
+    const tdQuant = document.createElement("td");
+    tdQuant.textContent = est ? est.quant : "—";
+    tr.appendChild(tdQuant);
+
+    // VRAM
+    const tdVram = document.createElement("td");
+    tdVram.textContent = est ? `${est.memGB} GB` : "—";
+    tr.appendChild(tdVram);
+
     // Est. Local TPS
     const tdLocal = document.createElement("td");
-    tdLocal.textContent = EST_LOCAL_TPS[m] || "—";
+    tdLocal.textContent = est ? `~${est.tps}` : "—";
     tr.appendChild(tdLocal);
+
+    // Est. Quality
+    const tdQual = document.createElement("td");
+    tdQual.textContent = est ? `~${est.qualityRetention}%` : "—";
+    if (est) tdQual.title = "Estimated score at this quantization = cloud_score × quality_retention / 100";
+    tr.appendChild(tdQual);
 
     // Cost per 1M tokens
     const tdCost = document.createElement("td");

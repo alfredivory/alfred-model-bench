@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alfred Model Bench — Dashboard</title>
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 </head>
 <body>
@@ -20,7 +20,7 @@
                 <thead><tr id="table-head"></tr></thead>
                 <tbody id="table-body"></tbody>
             </table>
-            <p class="footnote">¹ Est. Local TPS: estimated output tokens/sec on Mac Studio M3/M4 Ultra 512GB using Q4 quantisation (MLX/llama.cpp). Actual performance varies by quantisation level, prompt length, and runtime.</p>
+            <p class="footnote">¹ Mac Studio estimates based on M3/M4 Ultra 512GB. Best quantization = highest quality that fits in ~490GB usable memory. Quality retention from published MMLU/benchmark comparisons. Estimated score at this quantization = cloud_score × quality_retention / 100. Actual performance will be validated when hardware arrives.</p>
         </section>
         <section id="radar-section">
             <h2>Radar Comparison</h2>
@@ -42,6 +42,6 @@
             </table>
         </section>
     </main>
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=5"></script>
 </body>
 </html>
