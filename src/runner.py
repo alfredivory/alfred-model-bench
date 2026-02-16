@@ -1,5 +1,6 @@
 """Main benchmark runner."""
 
+import json
 import time
 import yaml
 from pathlib import Path
@@ -133,28 +134,53 @@ class BenchmarkRunner:
             return []
 
         total = len(models) * len(scenarios)
-        results = []
 
-        console.print(f"\n[bold]Running {len(models)} models × {len(scenarios)} scenarios = {total} tests[/bold]\n")
+        # Load incremental progress if available
+        progress_file = Path("results/_progress.jsonl")
+        progress_file.parent.mkdir(exist_ok=True)
+        results = []
+        completed = set()
+        if progress_file.exists():
+            for line in progress_file.read_text().strip().split("\n"):
+                if line:
+                    r = json.loads(line)
+                    results.append(r)
+                    completed.add((r["model"], r["scenario"]))
+            if completed:
+                console.print(f"[yellow]Resuming: {len(completed)} tests already completed[/yellow]")
+
+        skipped = len(completed)
+        console.print(f"\n[bold]Running {len(models)} models × {len(scenarios)} scenarios = {total} tests ({skipped} cached)[/bold]\n")
 
         with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"),
-                      BarColumn(), TextColumn("{task.completed}/{task.total}")) as progress:
-            task = progress.add_task("Benchmarking...", total=total)
+                      BarColumn(), TextColumn("{task.completed}/{task.total}")) as progress_bar:
+            task = progress_bar.add_task("Benchmarking...", total=total, completed=skipped)
             for model_cfg in models:
                 for scenario in scenarios:
-                    progress.update(task, description=f"{model_cfg['id'][:30]} × {scenario['_file']}")
+                    key = (model_cfg["id"], scenario["_file"])
+                    if key in completed:
+                        progress_bar.advance(task)
+                        continue
+                    progress_bar.update(task, description=f"{model_cfg['id'][:30]} × {scenario['_file']}")
                     # Skip optional models that aren't available
                     if model_cfg.get("optional") and model_cfg["provider"] == "ollama":
                         if not self.ollama.is_available():
-                            progress.advance(task)
+                            progress_bar.advance(task)
                             continue
                     result = self.run_single(model_cfg, scenario)
                     results.append(result)
+                    # Save incrementally
+                    with open(progress_file, "a") as f:
+                        f.write(json.dumps(result) + "\n")
                     if result.get("error"):
                         console.print(f"  [red]✗ {result['error'][:60]}[/red]")
                     else:
                         console.print(f"  [green]✓[/green] {result['model'][:30]} × {result['scenario']}: {result['score']}/100 ({result['duration_s']}s)")
-                    progress.advance(task)
+                    progress_bar.advance(task)
+
+        # Clean up progress file on successful completion
+        if progress_file.exists():
+            progress_file.unlink()
 
         return results
 

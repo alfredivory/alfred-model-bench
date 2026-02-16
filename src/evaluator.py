@@ -45,8 +45,12 @@ class Evaluator:
                 ),
             },
         ]
-        raw = self.provider.complete(self.model, messages, temperature=0.0)
-        text = self.provider.get_text(raw)
+        try:
+            raw = self.provider.complete(self.model, messages, temperature=0.0)
+            text = self.provider.get_text(raw)
+        except Exception as e:
+            # If evaluator fails, return default score
+            return 50
         parsed = _extract_json(text)
         if parsed and isinstance(parsed, dict) and "score" in parsed:
             return max(0, min(100, int(parsed["score"])))

@@ -1,4 +1,4 @@
-const DATA_URL = "../results/latest.json";
+const DATA_URL = "./results.json";
 
 const COLORS = [
   "#6ee7b7","#93c5fd","#fca5a5","#fcd34d","#c4b5fd",

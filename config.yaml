@@ -1,12 +1,12 @@
 openrouter_api_key_file: ~/.config/openrouter/api_key
 ollama_url: http://localhost:11434
-evaluator_model: anthropic/claude-sonnet-4-20250514
+evaluator_model: anthropic/claude-sonnet-4
 
 models:
   # Cloud (OpenRouter)
-  - id: anthropic/claude-sonnet-4-20250514
+  - id: anthropic/claude-sonnet-4
     provider: openrouter
-  - id: anthropic/claude-opus-4-20250514
+  - id: anthropic/claude-opus-4
     provider: openrouter
   - id: openai/gpt-4o
     provider: openrouter
@@ -16,20 +16,44 @@ models:
     provider: openrouter
   - id: openai/o4-mini
     provider: openrouter
-  - id: google/gemini-2.5-pro-preview
+  - id: google/gemini-2.5-pro
     provider: openrouter
-  - id: google/gemini-2.5-flash-preview
+  - id: google/gemini-2.5-flash
     provider: openrouter
   - id: deepseek/deepseek-chat-v3-0324
     provider: openrouter
-  - id: deepseek/deepseek-r1
+  - id: deepseek/deepseek-r1-0528
     provider: openrouter
   - id: meta-llama/llama-4-maverick
     provider: openrouter
   - id: qwen/qwen-2.5-72b-instruct
     provider: openrouter
+  - id: moonshotai/kimi-k2.5
+    provider: openrouter
+  - id: minimax/minimax-m1
+    provider: openrouter
+  - id: meta-llama/llama-3.3-70b-instruct
+    provider: openrouter
 
-  # Local (Ollama) - optional
+  # Local (Ollama) - quantization comparison
+  # Llama 3.3 70B at different quantization levels (for Mac Studio 512GB)
+  - id: llama3.3:70b-instruct-q4_K_M
+    provider: ollama
+    optional: true
+    tags: [quantization-test, q4]
+  - id: llama3.3:70b-instruct-q5_K_M
+    provider: ollama
+    optional: true
+    tags: [quantization-test, q5]
+  - id: llama3.3:70b-instruct-q8_0
+    provider: ollama
+    optional: true
+    tags: [quantization-test, q8]
+  - id: llama3.3:70b-instruct-fp16
+    provider: ollama
+    optional: true
+    tags: [quantization-test, fp16]
+  # Smaller local models
   - id: llama3.2:8b
     provider: ollama
     optional: true
