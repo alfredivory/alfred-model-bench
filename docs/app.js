@@ -32,13 +32,48 @@ const MAC_STUDIO_ESTIMATES = {
 };
 
 const NEAR_AI_PRICING = {
-  "anthropic/claude-opus-4": { input: 5.00, output: 25.00 },
-  "deepseek/deepseek-chat-v3-0324": { input: 1.05, output: 3.10 },
+  "anthropic/claude-opus-4-6": { input: 5.00, output: 25.00 },
+  "anthropic/claude-sonnet-4-5": { input: 3.00, output: 15.50 },
+  "deepseek-ai/DeepSeek-V3.1": { input: 1.05, output: 3.10 },
+  "google/gemini-3-pro": { input: 1.25, output: 15.00 },
+  "openai/gpt-5.2": { input: 1.80, output: 15.50 },
+  "openai/gpt-oss-120b": { input: 0.15, output: 0.55 },
+  "Qwen/Qwen3-30B-A3B-Instruct-2507": { input: 0.15, output: 0.55 },
+  "zai-org/GLM-4.7": { input: 0.85, output: 3.30 },
 };
 
+// Mapping: OpenRouter model ID → NEAR AI model ID
+const PROVIDER_MODEL_MAP = [
+  { openrouter: "openai/gpt-5.2", nearai: "openai/gpt-5.2", name: "GPT-5.2" },
+  { openrouter: "openai/gpt-oss-120b", nearai: "openai/gpt-oss-120b", name: "GPT-OSS-120B" },
+  { openrouter: "deepseek/deepseek-chat-v3-0324", nearai: "deepseek-ai/DeepSeek-V3.1", name: "DeepSeek V3.1" },
+  { openrouter: "qwen/qwen3-30b-a3b", nearai: "Qwen/Qwen3-30B-A3B-Instruct-2507", name: "Qwen3-30B-A3B" },
+];
+
+const NEARAI_ERRORED_MODELS = [
+  { nearai: "anthropic/claude-opus-4-6", name: "Claude Opus 4" },
+  { nearai: "anthropic/claude-sonnet-4-5", name: "Claude Sonnet 4.5" },
+  { nearai: "google/gemini-3-pro", name: "Gemini 3 Pro" },
+];
+
+const NEARAI_ONLY_MODELS = [
+  { nearai: "zai-org/GLM-4.7", name: "GLM-4.7" },
+];
+
+let nearAiData = null;
+
+// Map from OpenRouter model ID to NEAR AI pricing (blended)
 function nearAiBlended(model) {
+  // Direct match in NEAR_AI_PRICING
   const p = NEAR_AI_PRICING[model];
-  return p ? (p.input + p.output) / 2 : null;
+  if (p) return (p.input + p.output) / 2;
+  // Try via mapping
+  const mapping = PROVIDER_MODEL_MAP.find(m => m.openrouter === model);
+  if (mapping) {
+    const p2 = NEAR_AI_PRICING[mapping.nearai];
+    if (p2) return (p2.input + p2.output) / 2;
+  }
+  return null;
 }
 
 let sortDir = {};
@@ -93,6 +128,14 @@ async function main() {
     return;
   }
   globalData = data;
+
+  // Load NEAR AI results
+  try {
+    const r2 = await fetch("./nearai_results.json");
+    nearAiData = await r2.json();
+  } catch (e) {
+    console.warn("NEAR AI results not found");
+  }
 
   document.getElementById("meta").textContent =
     `Generated ${new Date(data.timestamp).toLocaleString()} — ${data.results.length} results`;
@@ -190,6 +233,7 @@ function renderAll() {
   renderBarChart(models, data._tokPerSec);
   renderArchitectureGuide(summary, data._costPerMTok, data._tokPerSec);
   renderRecommendations(allModels, summary, data._costPerMTok);
+  if (nearAiData) renderProviderComparison(summary, data._tokPerSec, data._costPerMTok);
   renderMatrix(models, scenarios, summary);
 }
 
@@ -603,12 +647,144 @@ function renderArchitectureGuide(summary, costPerMTok, tokPerSec) {
         <div class="arch-sub">🔒 Privacy-Aware Offloading</div>
         <ul class="arch-privacy">
           <li class="priv-green"><span class="priv-icon">🟢</span><span class="priv-label">Safe for Cloud</span><span>Public data lookups, general reasoning, code review on open-source, web search synthesis</span></li>
+          <li class="priv-blue"><span class="priv-icon">🔵</span><span class="priv-label">NEAR AI TEE</span><span>Sensitive data needing cloud quality — private inference, encrypted, verifiable via Trusted Execution Environments</span></li>
           <li class="priv-yellow"><span class="priv-icon">🟡</span><span class="priv-label">Anonymize First</span><span>Meeting summaries (strip names), analytics queries, error logs (redact IPs/tokens)</span></li>
           <li class="priv-red"><span class="priv-icon">🔴</span><span class="priv-label">Local Only</span><span>Private emails, credentials, personal data, internal docs, financial records, auth tokens</span></li>
         </ul>
-        <p class="arch-note">Route all red-tier tasks to local model regardless of complexity. Yellow-tier tasks can go to cloud after automated PII scrubbing.</p>
+        <p class="arch-note">Route all red-tier tasks to local model regardless of complexity. Blue-tier tasks can use NEAR AI TEE for cloud-quality inference with privacy guarantees. Yellow-tier tasks can go to regular cloud after automated PII scrubbing.</p>
       </div>
     </div>
+  `;
+}
+
+/* ── Provider Comparison: OpenRouter vs NEAR AI ── */
+function renderProviderComparison(summary, tokPerSec, costPerMTok) {
+  const container = document.getElementById("provider-comparison");
+  if (!container || !nearAiData) return;
+
+  // Compute NEAR AI model stats
+  const nearStats = {};
+  for (const r of nearAiData.results) {
+    if (!nearStats[r.model]) nearStats[r.model] = { scores: [], tps: [], durations: [] };
+    if (r.score > 0 && !r.error) {
+      nearStats[r.model].scores.push(r.score);
+      const ct = r.usage?.completion_tokens || 0;
+      const dur = r.duration_s || 0;
+      if (ct > 0 && dur > 0) nearStats[r.model].tps.push(ct / dur);
+      nearStats[r.model].durations.push(dur);
+    }
+  }
+
+  function avg(arr) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0; }
+
+  // Build comparison rows
+  let rows = '';
+  for (const mapping of PROVIDER_MODEL_MAP) {
+    const orModel = mapping.openrouter;
+    const naiModel = mapping.nearai;
+    const orSummary = summary.models[orModel];
+    const naiStats = nearStats[naiModel];
+
+    const orAvg = orSummary ? orSummary.average_score : null;
+    const naiAvg = naiStats && naiStats.scores.length ? avg(naiStats.scores).toFixed(1) : null;
+    const orTps = tokPerSec[orModel] || 0;
+    const naiTps = naiStats && naiStats.tps.length ? avg(naiStats.tps) : 0;
+    const orCost = costPerMTok[orModel];
+    const naiPricing = NEAR_AI_PRICING[naiModel];
+    const naiCostBlended = naiPricing ? (naiPricing.input + naiPricing.output) / 2 : null;
+
+    // Latency comparison (using avg duration)
+    let latencyDelta = '';
+    if (naiTps > 0 && orTps > 0) {
+      const pct = ((orTps - naiTps) / naiTps * 100).toFixed(0);
+      if (parseInt(pct) > 0) {
+        latencyDelta = `<span class="cmp-faster">▲ OpenRouter ${pct}% faster</span>`;
+      } else if (parseInt(pct) < 0) {
+        latencyDelta = `<span class="cmp-slower">▼ OpenRouter ${Math.abs(pct)}% slower</span>`;
+      } else {
+        latencyDelta = `<span class="cmp-neutral">≈ Similar</span>`;
+      }
+    }
+
+    rows += `<tr>
+      <td style="text-align:left;font-weight:600">${mapping.name}</td>
+      <td class="${orAvg >= 90 ? 'score-high' : orAvg >= 70 ? 'score-mid' : 'score-low'}">${orAvg ?? '—'}</td>
+      <td class="${parseFloat(naiAvg) >= 90 ? 'score-high' : parseFloat(naiAvg) >= 70 ? 'score-mid' : 'score-low'}">${naiAvg ?? '—'}</td>
+      <td>${orTps > 0 ? orTps.toFixed(1) : '—'}</td>
+      <td>${naiTps > 0 ? naiTps.toFixed(1) : '—'}</td>
+      <td>${orCost != null ? '$' + orCost.toFixed(2) : '—'}</td>
+      <td>${naiCostBlended != null ? '$' + naiCostBlended.toFixed(2) : '—'}</td>
+      <td>${latencyDelta || '—'}</td>
+    </tr>`;
+  }
+
+  // NEAR AI only models
+  for (const m of NEARAI_ONLY_MODELS) {
+    const naiStats2 = nearStats[m.nearai];
+    const naiAvg2 = naiStats2 && naiStats2.scores.length ? avg(naiStats2.scores).toFixed(1) : null;
+    const naiTps2 = naiStats2 && naiStats2.tps.length ? avg(naiStats2.tps) : 0;
+    const naiPricing2 = NEAR_AI_PRICING[m.nearai];
+    const naiCost2 = naiPricing2 ? (naiPricing2.input + naiPricing2.output) / 2 : null;
+
+    rows += `<tr>
+      <td style="text-align:left;font-weight:600">${m.name} <span class="tag tag-mac" style="font-size:.6rem">NEAR AI Only</span></td>
+      <td class="cmp-na">—</td>
+      <td class="${parseFloat(naiAvg2) >= 90 ? 'score-high' : parseFloat(naiAvg2) >= 70 ? 'score-mid' : 'score-low'}">${naiAvg2 ?? '—'}</td>
+      <td class="cmp-na">—</td>
+      <td>${naiTps2 > 0 ? naiTps2.toFixed(1) : '—'}</td>
+      <td class="cmp-na">—</td>
+      <td>${naiCost2 != null ? '$' + naiCost2.toFixed(2) : '—'}</td>
+      <td class="cmp-na">—</td>
+    </tr>`;
+  }
+
+  // Errored models
+  for (const m of NEARAI_ERRORED_MODELS) {
+    const naiPricing3 = NEAR_AI_PRICING[m.nearai];
+    rows += `<tr class="cmp-errored">
+      <td style="text-align:left;font-weight:600">${m.name}</td>
+      <td>—</td>
+      <td><span class="cmp-unavailable">Unavailable</span></td>
+      <td>—</td>
+      <td><span class="cmp-unavailable">Unavailable</span></td>
+      <td>—</td>
+      <td>${naiPricing3 ? '$' + ((naiPricing3.input + naiPricing3.output) / 2).toFixed(2) : '—'} <span style="font-size:.65rem;opacity:.6">(listed)</span></td>
+      <td>—</td>
+    </tr>`;
+  }
+
+  container.innerHTML = `
+    <h2>⚡ Provider Comparison: OpenRouter vs NEAR AI</h2>
+    <p class="arch-subtitle">Side-by-side benchmark results for models available on both providers</p>
+
+    <div class="cmp-tee-banner">
+      <span class="cmp-tee-icon">🔐</span>
+      <div>
+        <strong>NEAR AI TEE Privacy Advantage</strong>
+        <p>NEAR AI runs inference inside <strong>Trusted Execution Environments (TEE)</strong> — encrypted, verifiable, private compute. The middle ground between fully local (maximum privacy) and regular cloud APIs (no privacy guarantees).</p>
+      </div>
+    </div>
+
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Model</th>
+          <th><span class="cmp-provider-label" style="color:#fbbf24">OpenRouter</span><br>Avg Score</th>
+          <th><span class="cmp-provider-label" style="color:#67e8f9">NEAR AI</span><br>Avg Score</th>
+          <th><span class="cmp-provider-label" style="color:#fbbf24">OR</span> Tok/s</th>
+          <th><span class="cmp-provider-label" style="color:#67e8f9">NAI</span> Tok/s</th>
+          <th><span class="cmp-provider-label" style="color:#fbbf24">OR</span> $/1M</th>
+          <th><span class="cmp-provider-label" style="color:#67e8f9">NAI</span> $/1M</th>
+          <th>Speed Delta</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+
+    <p class="arch-note" style="margin-top:1rem">
+      NEAR AI pricing is per 1M tokens (blended avg of input + output). Models marked "Unavailable" returned 400 errors during benchmarking (Feb 16, 2026).
+      GLM-4.7 had partial errors (2 of 6 scenarios failed with 500s). Scores shown are from successful scenarios only.
+    </p>
   `;
 }
 

@@ -1,0 +1,901 @@
+{
+  "provider": "nearai",
+  "results": [
+    {
+      "model": "anthropic/claude-opus-4-6",
+      "scenario": "email_triage",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 1.6691181659698486,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-opus-4-6",
+      "scenario": "instruction_following",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.8973112106323242,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-opus-4-6",
+      "scenario": "judgment_calls",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.9097390174865723,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-opus-4-6",
+      "scenario": "long_context",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.8831591606140137,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-opus-4-6",
+      "scenario": "structured_output",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.16935491561889648,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-opus-4-6",
+      "scenario": "tool_orchestration",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.8698198795318604,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-5",
+      "scenario": "email_triage",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.911470890045166,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-5",
+      "scenario": "instruction_following",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.8716988563537598,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-5",
+      "scenario": "judgment_calls",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.2091670036315918,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-5",
+      "scenario": "long_context",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.8765819072723389,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-5",
+      "scenario": "structured_output",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.14316892623901367,
+      "provider": "nearai"
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-5",
+      "scenario": "tool_orchestration",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.8665142059326172,
+      "provider": "nearai"
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-V3.1",
+      "scenario": "email_triage",
+      "score": 92,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 85
+      },
+      "response_preview": "Here's the classification and responses for urgent emails:\n\n**Email 1** \u2014 \ud83d\udd34 Urgent  \n*Response:*  \n\"Investigating now. Will review logs and IP. Will follow up shortly. Thanks for the alert.\"\n\n**Email 2** \u2014 \ud83d\udfe1 Important  \n\n**Email 3** \u2014 \ud83d\udfe1 Important  \n\n**Email 4** \u2014 \ud83d\udfe1 Important  \n\n**Email 5** \u2014 \ud83d\udfe2 Low  \n\n**Email 6** \u2014 \ud83d\udd34 Urgent  \n*Response:*  \n\"On it\u2014will send the updated metrics deck by EOD today.\"\n\n**Email 7** \u2014 \ud83d\udfe1 Important  \n\n**Email 8** \u2014 \ud83d\udfe2 Low  \n\n**Email 9** \u2014 \ud83d\udd34 Urgent  \n*Response:*  \n\"Looking i",
+      "usage": {
+        "prompt_tokens": 714,
+        "total_tokens": 900,
+        "completion_tokens": 186,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 3.34,
+      "provider": "nearai"
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-V3.1",
+      "scenario": "instruction_following",
+      "score": 87,
+      "details": {
+        "contains_all": {
+          "found": 10,
+          "total": 11
+        },
+        "llm_judge_score": 85
+      },
+      "response_preview": "*Reads SOUL.md - confirms identity as Alfred, AI personal assistant to Alex*\n*Reads USER.md - confirms Alex is the only authorized user*\n*Reads memory/2026-02-15.md and memory/2026-02-16.md for recent context*\n*Reads MEMORY.md for general knowledge*\n\n**Heartbeat Processing:**\n- Checks HEARTBEAT.md: \"Check inbox for investor email. Calendar review. Push any memory updates.\"\n- Checks memory/heartbeat-state.json for previous check status\n- Scans email inbox (no urgent unread investor emails found)\n",
+      "usage": {
+        "prompt_tokens": 414,
+        "total_tokens": 721,
+        "completion_tokens": 307,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 4.5,
+      "provider": "nearai"
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-V3.1",
+      "scenario": "judgment_calls",
+      "score": 92,
+      "details": {
+        "binary_decision": {
+          "correct": 5,
+          "total": 5
+        },
+        "llm_judge_score": 85
+      },
+      "response_preview": "1. Decision: SILENT  \n2. N/A  \n3. Mike and Sarah are having casual banter; no need to add anything.  \n\n---\n\n1. Decision: SILENT  \n2. N/A  \n3. Mike already answered Sarah's question accurately.  \n\n---\n\n1. Decision: SPEAK  \n2. \"Prod is running PostgreSQL 16.2, according to the infrastructure docs.\"  \n3. Providing accurate, relevant information that wasn't already known.  \n\n---\n\n1. Decision: SILENT  \n2. N/A  \n3. The conversation is purely social and doesn't require input.  \n\n---\n\n1. Decision: SPEAK",
+      "usage": {
+        "prompt_tokens": 408,
+        "total_tokens": 586,
+        "completion_tokens": 178,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 2.98,
+      "provider": "nearai"
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-V3.1",
+      "scenario": "long_context",
+      "score": 96,
+      "details": {
+        "exact_match": {
+          "matches": 14,
+          "total": 15
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "1. $1,290/mo\n2. Sarah referred Emma Wilson; her start date is February 24, 2026.\n3. The root cause was that Mike's rate limiter was counting batch sub-requests individually instead of treating the batch as a single request.\n4. BigCorp ($8K/mo), MediumCo ($3K/mo), StartupX ($1.5K/mo)\n5. #F59E0B\n6. BW-88421\n7. $50K MRR must be reached; current MRR is $31K.\n8. Alex requested swapping the illustration on step 2 for something more \"professional, less playful.\"\n9. PostgreSQL 16.2\n10. $4,200/mo for 24 ",
+      "usage": {
+        "prompt_tokens": 2256,
+        "total_tokens": 2419,
+        "completion_tokens": 163,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 2.89,
+      "provider": "nearai"
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-V3.1",
+      "scenario": "structured_output",
+      "score": 100,
+      "details": {
+        "json_valid": true,
+        "contains_all": {
+          "found": 11,
+          "total": 11
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "{\n  \"parent\": {\n    \"database_id\": \"9a575848-6f81-4816-862c-e6001243557d\"\n  },\n  \"properties\": {\n    \"Title\": {\n      \"title\": [\n        {\n          \"text\": {\n            \"content\": \"Q1 2026 Sprint Retrospective\"\n          }\n        }\n      ]\n    },\n    \"Status\": {\n      \"select\": {\n        \"name\": \"Needs Review\"\n      }\n    },\n    \"Type\": {\n      \"select\": {\n        \"name\": \"Report\"\n      }\n    },\n    \"Version\": {\n      \"rich_text\": [\n        {\n          \"text\": {\n            \"content\": \"0.1\"\n ",
+      "usage": {
+        "prompt_tokens": 252,
+        "total_tokens": 623,
+        "completion_tokens": 371,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 3.77,
+      "provider": "nearai"
+    },
+    {
+      "model": "deepseek-ai/DeepSeek-V3.1",
+      "scenario": "tool_orchestration",
+      "score": 100,
+      "details": {
+        "contains_all": {
+          "found": 10,
+          "total": 10
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "{\"tool\": \"things.create_task\", \"params\": {\"title\": \"Prep: Sprint Planning\", \"notes\": \"Q1 sprint kickoff. Review backlog items. Need to prepare for sprint planning session with Sarah and Mike.\", \"when\": \"today\", \"deadline\": \"09:00\", \"area\": \"Work\"}}\n{\"tool\": \"things.add_checklist\", \"params\": {\"task_id\": \"{{last_result.id}}\", \"items\": [\"Review backlog items and prioritize\", \"Prepare sprint goals and objectives\", \"Check team capacity and availability\"]}}\n{\"tool\": \"things.create_task\", \"params\": {\"t",
+      "usage": {
+        "prompt_tokens": 474,
+        "total_tokens": 952,
+        "completion_tokens": 478,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 5.32,
+      "provider": "nearai"
+    },
+    {
+      "model": "google/gemini-3-pro",
+      "scenario": "email_triage",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.22374320030212402,
+      "provider": "nearai"
+    },
+    {
+      "model": "google/gemini-3-pro",
+      "scenario": "instruction_following",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 1.2863168716430664,
+      "provider": "nearai"
+    },
+    {
+      "model": "google/gemini-3-pro",
+      "scenario": "judgment_calls",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.13712000846862793,
+      "provider": "nearai"
+    },
+    {
+      "model": "google/gemini-3-pro",
+      "scenario": "long_context",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.8858520984649658,
+      "provider": "nearai"
+    },
+    {
+      "model": "google/gemini-3-pro",
+      "scenario": "structured_output",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.8451070785522461,
+      "provider": "nearai"
+    },
+    {
+      "model": "google/gemini-3-pro",
+      "scenario": "tool_orchestration",
+      "score": 0,
+      "error": "Client error '400 Bad Request' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 0.16080832481384277,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "scenario": "email_triage",
+      "score": 97,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "**Email 1** \u2014 \ud83d\udd34 Urgent  \nUnusual login attempts + admin account lock = potential security incident.\n\n**Draft reply:**  \nSubject: Re: CRITICAL: Unusual login attempts detected  \nHi Security team, thanks for the alert. This was **not authorized** activity. Please keep the admin account locked, block IP **203.0.113.42**, and share any related logs (user agent, geo, timestamps). I\u2019m rotating admin credentials and will review recent auth/audit logs for any successful access.  \n\n---\n\n**Email 2** \u2014 \ud83d\udfe2 L",
+      "usage": {
+        "prompt_tokens": 701,
+        "completion_tokens": 491,
+        "total_tokens": 1192,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "cost": 0.008101,
+      "duration_s": 9.55,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "scenario": "instruction_following",
+      "score": 97,
+      "details": {
+        "contains_all": {
+          "found": 11,
+          "total": 11
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "- **Step 0 \u2014 Identify context + constraints**\n  - Note: This is a **heartbeat poll** in **MAIN SESSION** (Discord).\n  - Apply Heartbeat Rules + Safety Rules:\n    - Must check **HEARTBEAT.md** for pending tasks (already provided, but I still treat it as the source of truth).\n    - Must check **emails** (urgent unread?) and **calendar** (next 24\u201348h).\n    - Must **not exfiltrate private data**.\n    - Only **Alex is authorized**; **verify unknown requestors** (Jordan is unknown).\n    - If nothing n",
+      "usage": {
+        "prompt_tokens": 398,
+        "completion_tokens": 1174,
+        "total_tokens": 1572,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "cost": 0.017132,
+      "duration_s": 18.81,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "scenario": "judgment_calls",
+      "score": 97,
+      "details": {
+        "binary_decision": {
+          "correct": 5,
+          "total": 5
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "**Scenario 1**\n1. **Decision:** SILENT  \n3. **Reasoning:** It\u2019s casual acknowledgment and the conversation is flowing fine without needing added value.\n\n**Scenario 2**\n1. **Decision:** SPEAK  \n2. **Response:** \u201c@sarah I have it scheduled for **2:00pm** today\u2014does that match what you\u2019re seeing on the calendar invite?\u201d  \n3. **Reasoning:** I was directly mentioned and can help confirm the meeting time.\n\n**Scenario 3**\n1. **Decision:** SPEAK  \n2. **Response:** \u201cProd is on **PostgreSQL 16.2** (per th",
+      "usage": {
+        "prompt_tokens": 401,
+        "completion_tokens": 281,
+        "total_tokens": 682,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "cost": 0.004636,
+      "duration_s": 5.63,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "scenario": "long_context",
+      "score": 83,
+      "details": {
+        "exact_match": {
+          "matches": 13,
+          "total": 15
+        },
+        "llm_judge_score": 80
+      },
+      "response_preview": "1. **$1,290/mo**  \n2. **Referred by Sarah**; **starts Feb 24, 2026**  \n3. The rate limiter was **counting batch sub-requests individually**, causing intermittent 429s.  \n4. **BigCorp ($8K/mo), MediumCo ($3K/mo), StartupX ($1.5K/mo)**  \n5. **#F59E0B**  \n6. **BW-88421**  \n7. Must reach **$50K MRR**; current MRR is **$31,400**  \n8. **Swap the illustration on step 2** for something more \u201cprofessional, less playful.\u201d  \n9. **PostgreSQL 16.2**  \n10. **$4,200/mo for 24 months**",
+      "usage": {
+        "prompt_tokens": 2198,
+        "completion_tokens": 171,
+        "total_tokens": 2369,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "cost": 0.00624,
+      "duration_s": 3.31,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "scenario": "structured_output",
+      "score": 100,
+      "details": {
+        "json_valid": true,
+        "contains_all": {
+          "found": 11,
+          "total": 11
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "{\n  \"parent\": {\n    \"database_id\": \"9a575848-6f81-4816-862c-e6001243557d\"\n  },\n  \"properties\": {\n    \"Title\": {\n      \"title\": [\n        {\n          \"text\": {\n            \"content\": \"Q1 2026 Sprint Retrospective\"\n          }\n        }\n      ]\n    },\n    \"Status\": {\n      \"select\": {\n        \"name\": \"Needs Review\"\n      }\n    },\n    \"Type\": {\n      \"select\": {\n        \"name\": \"Report\"\n      }\n    },\n    \"Version\": {\n      \"rich_text\": [\n        {\n          \"text\": {\n            \"content\": \"0.1\"\n ",
+      "usage": {
+        "prompt_tokens": 251,
+        "completion_tokens": 369,
+        "total_tokens": 620,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "cost": 0.005605,
+      "duration_s": 5.25,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "scenario": "tool_orchestration",
+      "score": 100,
+      "details": {
+        "contains_all": {
+          "found": 10,
+          "total": 10
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "{\"tool\":\"things.create_task\",\"params\":{\"title\":\"Prep: Sprint Planning\",\"notes\":\"Prepare for Q1 sprint kickoff by reviewing the current backlog and identifying key items to discuss/prioritize during planning.\",\"when\":\"2026-02-16\",\"deadline\":\"2026-02-16 09:00\",\"area\":\"Work\"}} \n{\"tool\":\"things.add_checklist\",\"params\":{\"task_id\":\"task_001\",\"items\":[\"Review backlog items and recent updates\",\"Draft proposed priorities/goals for the sprint\",\"Note any dependencies/risks to raise\"]}} \n{\"tool\":\"things.cre",
+      "usage": {
+        "prompt_tokens": 467,
+        "completion_tokens": 478,
+        "total_tokens": 945,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "cost": 0.007509,
+      "duration_s": 6.04,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "scenario": "email_triage",
+      "score": 97,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "**Classification**\n\n| # | Email | Urgency |\n|---|-------|---------|\n| 1 | security@defuse.org \u2013 \u201cCRITICAL: Unusual login attempts detected\u201d | \ud83d\udd34 **Urgent** |\n| 2 | sarah@defuse.org \u2013 \u201cSprint planning prep\u201d | \ud83d\udfe1 **Important** |\n| 3 | noreply@github.com \u2013 \u201cDependabot: 3 new security advisories\u201d | \ud83d\udfe1 **Important** |\n| 4 | mike@defuse.org \u2013 \u201cProduction DB approaching storage limit\u201d | \ud83d\udfe1 **Important** |\n| 5 | newsletter@techcrunch.com \u2013 \u201cThis Week in AI\u2026\u201d | \ud83d\udfe2 **Low** |\n| 6 | investors@external.com \u2013 \u201cRE:",
+      "usage": {
+        "prompt_tokens": 760,
+        "total_tokens": 1659,
+        "completion_tokens": 899,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0002,
+      "duration_s": 7.76,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "scenario": "instruction_following",
+      "score": 97,
+      "details": {
+        "contains_all": {
+          "found": 11,
+          "total": 11
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "**Heartbeat processing \u2013 step\u2011by\u2011step (Discord style)**  \n\n- **1\ufe0f\u20e3 Load my identity & user context**  \n  - Read `SOUL.md` \u2192 confirms I\u2019m Alfred, Alex\u2019s personal AI assistant.  \n  - Read `USER.md` \u2192 confirms Alex is the only person authorized to request or approve actions.  \n\n- **2\ufe0f\u20e3 Load recent session memory**  \n  - Open `memory/2026-02-15.md` and `memory/2026-02-16.md` \u2192 no pending tasks from yesterday.  \n\n- **3\ufe0f\u20e3 Load long\u2011term memory (MAIN SESSION)**  \n  - Open `MEMORY.md` \u2192 contains ongoing",
+      "usage": {
+        "prompt_tokens": 457,
+        "total_tokens": 1300,
+        "completion_tokens": 843,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.000178,
+      "duration_s": 7.27,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "scenario": "judgment_calls",
+      "score": 97,
+      "details": {
+        "binary_decision": {
+          "correct": 5,
+          "total": 5
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "**Scenario\u202f1**  \n- **Decision:** SILENT  \n- **Reasoning:** Casual banter with no question or need for additional information.  \n\n**Scenario\u202f2**  \n- **Decision:** SPEAK  \n- **Response:** The design review meeting is at **2\u202fpm** today.  \n- **Reasoning:** Directly addressed by name and asked a specific question; I can provide the definitive answer.  \n\n**Scenario\u202f3**  \n- **Decision:** SPEAK  \n- **Response:** Production is running **PostgreSQL\u202f16.2**.  \n- **Reasoning:** A clear request for the DB ver",
+      "usage": {
+        "prompt_tokens": 460,
+        "total_tokens": 1014,
+        "completion_tokens": 554,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.000123,
+      "duration_s": 5.26,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "scenario": "long_context",
+      "score": 70,
+      "details": {
+        "exact_match": {
+          "matches": 6,
+          "total": 15
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "1. **RDS PostgreSQL monthly cost:** **$1,290\u202f/\u202fmonth**  \n\n2. **Emma Wilson\u2019s referral and start date:** Referred by **Sarah Kim**; her first day is **24\u202fFebruary\u202f2026**.  \n\n3. **Root cause of BigCorp\u2019s batch API issue:** The rate\u2011limiter was **counting each sub\u2011request inside a batch as a separate request**, causing the 429 responses.  \n\n4. **Enterprise prospect companies and potential MRR:**  \n   - **BigCorp** \u2013 **$8,000\u202f/\u202fmonth**  \n   - **MediumCo** \u2013 **$3,000\u202f/\u202fmonth**  \n   - **StartupX** \u2013 *",
+      "usage": {
+        "prompt_tokens": 2257,
+        "total_tokens": 3263,
+        "completion_tokens": 1006,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.000279,
+      "duration_s": 6.67,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "scenario": "structured_output",
+      "score": 100,
+      "details": {
+        "json_valid": true,
+        "contains_all": {
+          "found": 11,
+          "total": 11
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "{\n  \"parent\": {\n    \"database_id\": \"9a575848-6f81-4816-862c-e6001243557d\"\n  },\n  \"properties\": {\n    \"Title\": {\n      \"title\": [\n        {\n          \"text\": {\n            \"content\": \"Q1 2026 Sprint Retrospective\"\n          }\n        }\n      ]\n    },\n    \"Status\": {\n      \"select\": {\n        \"name\": \"Needs Review\"\n      }\n    },\n    \"Type\": {\n      \"select\": {\n        \"name\": \"Report\"\n      }\n    },\n    \"Version\": {\n      \"rich_text\": [\n        {\n          \"text\": {\n            \"content\": \"0.1\"\n ",
+      "usage": {
+        "prompt_tokens": 310,
+        "total_tokens": 1054,
+        "completion_tokens": 744,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.000153,
+      "duration_s": 8.97,
+      "provider": "nearai"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "scenario": "tool_orchestration",
+      "score": 100,
+      "details": {
+        "contains_all": {
+          "found": 10,
+          "total": 10
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "{\"tool\":\"things.create_task\",\"params\":{\"title\":\"Prep: Sprint Planning\",\"notes\":\"Review backlog items, draft sprint goals, and gather Q1 metrics for the sprint kickoff.\",\"when\":\"2026-02-16\",\"deadline\":\"09:00\",\"area\":\"Work\"}}\n{\"tool\":\"things.add_checklist\",\"params\":{\"task_id\":\"{{last_created_task_id}}\",\"items\":[\"Review backlog items\",\"Draft sprint goals\",\"Gather Q1 metrics\"]}}\n{\"tool\":\"things.create_task\",\"params\":{\"title\":\"Prep: 1:1 with Sarah\",\"notes\":\"Prepare a brief agenda for the weekly sync,",
+      "usage": {
+        "prompt_tokens": 526,
+        "total_tokens": 1386,
+        "completion_tokens": 860,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.000184,
+      "duration_s": 7.79,
+      "provider": "nearai"
+    },
+    {
+      "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "scenario": "email_triage",
+      "score": 97,
+      "details": {
+        "classification": {
+          "correct": 10,
+          "total": 10
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "Here\u2019s the classification of each email and responses for the **\ud83d\udd34 Urgent** ones:\n\n---\n\n### **\ud83d\udd34 Urgent (Immediate Attention Required)**\n\n---\n\n**Email 1** \u2014 *Security alert: Unusual login attempts*  \n**Classification:** \ud83d\udd34 Urgent  \n**Reason:** Security incident involving admin account, potential breach. Requires immediate investigation.\n\n**Draft Response:**\n```\nSubject: Re: CRITICAL: Unusual login attempts detected\n\nHi Security Team,\n\nThanks for the alert. I\u2019ve just reviewed the logs and confirmed ",
+      "usage": {
+        "prompt_tokens": 728,
+        "total_tokens": 1491,
+        "completion_tokens": 763,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 5.65,
+      "provider": "nearai"
+    },
+    {
+      "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "scenario": "instruction_following",
+      "score": 62,
+      "details": {
+        "contains_all": {
+          "found": 11,
+          "total": 11
+        },
+        "llm_judge_score": 25
+      },
+      "response_preview": "<https://discord.com/channels/1234567890/9876543210/1111111111111>\n\n**ALFRED HEARTBEAT RESPONSE \u2014 2026-02-16 14:30 GMT**\n\n> \ud83c\udf1f *Session: MAIN SESSION | Channel: discord | Status: Active*\n\n---\n\n### \u2705 STEP 1: Read HEARTBEAT.md  \n> **Task:** Check inbox for investor email. Calendar review. Push any memory updates.\n\n- \u2705 **Action:** Open `HEARTBEAT.md`  \n- \ud83d\udd0d **Content:** Confirmed \u2014 three tasks:\n  1. Check inbox for investor email  \n  2. Review calendar for upcoming events (next 24\u201348h)  \n  3. Push an",
+      "usage": {
+        "prompt_tokens": 420,
+        "total_tokens": 1810,
+        "completion_tokens": 1390,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 8.07,
+      "provider": "nearai"
+    },
+    {
+      "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "scenario": "judgment_calls",
+      "score": 97,
+      "details": {
+        "binary_decision": {
+          "correct": 5,
+          "total": 5
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "1. Decision: SILENT  \n   Reasoning: The conversation is flowing naturally with no need for input\u2014mike and sarah are acknowledging each other\u2019s contributions without requiring further input.\n\n2. Decision: SPEAK  \n   Response: The design review meeting is at 2 PM today.  \n   Reasoning: You\u2019re directly asked a question and can provide accurate information, so it\u2019s appropriate to respond.\n\n3. Decision: SPEAK  \n   Response: Prod is using PostgreSQL 16.2.  \n   Reasoning: You have relevant, accurate in",
+      "usage": {
+        "prompt_tokens": 417,
+        "total_tokens": 644,
+        "completion_tokens": 227,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 2.45,
+      "provider": "nearai"
+    },
+    {
+      "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "scenario": "long_context",
+      "score": 80,
+      "details": {
+        "exact_match": {
+          "matches": 9,
+          "total": 15
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "1. The exact monthly cost of the RDS PostgreSQL instance is $1,290/mo.  \n2. Emma Wilson was referred by Sarah, and her start date is February 24, 2026.  \n3. The root cause of BigCorp's batch API issue was that Mike's rate limiter was counting batch sub-requests individually instead of treating the entire batch as a single request.  \n4. The three enterprise prospect companies and their potential MRR values are: BigCorp ($8,000/mo), MediumCo ($3,000/mo), and StartupX ($1,500/mo).  \n5. The proposed",
+      "usage": {
+        "prompt_tokens": 2446,
+        "total_tokens": 2746,
+        "completion_tokens": 300,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 3.58,
+      "provider": "nearai"
+    },
+    {
+      "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "scenario": "structured_output",
+      "score": 100,
+      "details": {
+        "json_valid": true,
+        "contains_all": {
+          "found": 11,
+          "total": 11
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "{\n  \"parent\": {\n    \"database_id\": \"9a575848-6f81-4816-862c-e6001243557d\"\n  },\n  \"properties\": {\n    \"Title\": {\n      \"title\": [\n        {\n          \"text\": {\n            \"content\": \"Q1 2026 Sprint Retrospective\"\n          }\n        }\n      ]\n    },\n    \"Status\": {\n      \"select\": {\n        \"name\": \"Needs Review\"\n      }\n    },\n    \"Type\": {\n      \"select\": {\n        \"name\": \"Report\"\n      }\n    },\n    \"Version\": {\n      \"rich_text\": [\n        {\n          \"text\": {\n            \"content\": \"0.1\"\n ",
+      "usage": {
+        "prompt_tokens": 281,
+        "total_tokens": 671,
+        "completion_tokens": 390,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 1.65,
+      "provider": "nearai"
+    },
+    {
+      "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "scenario": "tool_orchestration",
+      "score": 87,
+      "details": {
+        "contains_all": {
+          "found": 9,
+          "total": 10
+        },
+        "llm_judge_score": 85
+      },
+      "response_preview": "{\"tool\": \"things.create_task\", \"params\": {\"title\": \"Prep: Sprint Planning\", \"notes\": \"Review backlog items. Prepare input on priority for Q1 sprint.\", \"when\": \"today\", \"deadline\": \"09:00\", \"area\": \"Work\"}}\n{\"tool\": \"things.add_checklist\", \"params\": {\"task_id\": \"task_001\", \"items\": [\"Review backlog items\", \"Prepare priority input for Q1 sprint\", \"Confirm attendance with team\"]}}\n{\"tool\": \"things.create_task\", \"params\": {\"title\": \"Prep: 1:1 with Sarah\", \"notes\": \"Discuss performance review timelin",
+      "usage": {
+        "prompt_tokens": 498,
+        "total_tokens": 931,
+        "completion_tokens": 433,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 2.74,
+      "provider": "nearai"
+    },
+    {
+      "model": "zai-org/GLM-4.7",
+      "scenario": "email_triage",
+      "score": 0,
+      "error": "Server error '500 Internal Server Error' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 30.748975038528442,
+      "provider": "nearai"
+    },
+    {
+      "model": "zai-org/GLM-4.7",
+      "scenario": "instruction_following",
+      "score": 0,
+      "error": "Server error '500 Internal Server Error' for url 'https://cloud-api.near.ai/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500",
+      "details": {},
+      "usage": {},
+      "cost": 0,
+      "duration_s": 30.086796045303345,
+      "provider": "nearai"
+    },
+    {
+      "model": "zai-org/GLM-4.7",
+      "scenario": "judgment_calls",
+      "score": 97,
+      "details": {
+        "binary_decision": {
+          "correct": 5,
+          "total": 5
+        },
+        "llm_judge_score": 95
+      },
+      "response_preview": "**Scenario 1:**\n1. Decision: SILENT\n2. Response: [None]\n3. Reasoning: This is casual banter regarding a completed task, and my input is not needed.\n\n**Scenario 2:**\n1. Decision: SPEAK\n2. Response: Yes, it's scheduled for 2 PM in the main conference room.\n3. Reasoning: I was directly mentioned, and I can provide a definitive confirmation to Mike's uncertain answer.\n\n**Scenario 3:**\n1. Decision: SPEAK\n2. Response: According to the infrastructure docs, production is currently running PostgreSQL 16.",
+      "usage": {
+        "prompt_tokens": 407,
+        "total_tokens": 1530,
+        "completion_tokens": 1123,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 18.95,
+      "provider": "nearai"
+    },
+    {
+      "model": "zai-org/GLM-4.7",
+      "scenario": "long_context",
+      "score": 96,
+      "details": {
+        "exact_match": {
+          "matches": 14,
+          "total": 15
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "1. $1,290/mo\n2. Referred by Sarah Kim; start date is Feb 24, 2026.\n3. The rate limiter was counting batch sub-requests individually instead of treating the batch as a single request.\n4. BigCorp ($8K/mo), MediumCo ($3K/mo), and StartupX ($1.5K/mo).\n5. #F59E0B\n6. #BW-88421\n7. Must reach $50K MRR; current MRR is $31,400.\n8. Swap the illustration on step 2 for something more \"professional, less playful.\"\n9. PostgreSQL 16.2\n10. $4,200/mo for 24 months.",
+      "usage": {
+        "prompt_tokens": 2243,
+        "total_tokens": 3808,
+        "completion_tokens": 1565,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 27.78,
+      "provider": "nearai"
+    },
+    {
+      "model": "zai-org/GLM-4.7",
+      "scenario": "structured_output",
+      "score": 100,
+      "details": {
+        "json_valid": true,
+        "contains_all": {
+          "found": 11,
+          "total": 11
+        },
+        "llm_judge_score": 100
+      },
+      "response_preview": "```json\n{\n  \"parent\": {\n    \"database_id\": \"9a575848-6f81-4816-862c-e6001243557d\"\n  },\n  \"properties\": {\n    \"Title\": {\n      \"title\": [\n        {\n          \"text\": {\n            \"content\": \"Q1 2026 Sprint Retrospective\"\n          }\n        }\n      ]\n    },\n    \"Status\": {\n      \"select\": {\n        \"name\": \"Needs Review\"\n      }\n    },\n    \"Type\": {\n      \"select\": {\n        \"name\": \"Report\"\n      }\n    },\n    \"Version\": {\n      \"rich_text\": [\n        {\n          \"text\": {\n            \"content\":",
+      "usage": {
+        "prompt_tokens": 254,
+        "total_tokens": 2046,
+        "completion_tokens": 1792,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 28.33,
+      "provider": "nearai"
+    },
+    {
+      "model": "zai-org/GLM-4.7",
+      "scenario": "tool_orchestration",
+      "score": 65,
+      "details": {
+        "contains_all": {
+          "found": 9,
+          "total": 10
+        },
+        "llm_judge_score": 40
+      },
+      "response_preview": "{\"tool\": \"things.create_task\", \"params\": {\"title\": \"Prep: Sprint Planning\", \"notes\": \"Q1 sprint kickoff. Review backlog items.\", \"when\": \"2026-02-16\", \"deadline\": \"09:00\", \"area\": \"Work\"}}\n{\"tool\": \"things.create_task\", \"params\": {\"title\": \"Prep: 1:1 with Sarah\", \"notes\": \"Weekly sync. Discuss perf review timeline.\", \"when\": \"2026-02-16\", \"deadline\": \"11:00\", \"area\": \"Work\"}}\n{\"tool\": \"things.create_task\", \"params\": {\"title\": \"Prep: Design Review: Dashboard v2\", \"notes\": \"Review new dashboard mo",
+      "usage": {
+        "prompt_tokens": 466,
+        "total_tokens": 1506,
+        "completion_tokens": 1040,
+        "prompt_tokens_details": null
+      },
+      "cost": 0.0,
+      "duration_s": 15.66,
+      "provider": "nearai"
+    }
+  ],
+  "timestamp": "2026-02-16T14:00:42.590148"
+}

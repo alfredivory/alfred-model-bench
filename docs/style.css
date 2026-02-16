@@ -75,6 +75,8 @@ tr:hover { background: #1e2230; }
 .arch-privacy { list-style: none; padding: 0; }
 .arch-privacy li { padding: .5rem .75rem; margin-bottom: .4rem; border-radius: 8px; font-size: .82rem; display: flex; align-items: center; gap: .5rem; }
 .arch-privacy .priv-green { background: #064e3b33; border-left: 3px solid #6ee7b7; }
+.arch-privacy .priv-blue { background: #0c2d4a33; border-left: 3px solid #67e8f9; }
+.arch-privacy .priv-blue .priv-label { color: #67e8f9; }
 .arch-privacy .priv-yellow { background: #3b321033; border-left: 3px solid #fcd34d; }
 .arch-privacy .priv-red { background: #3b101033; border-left: 3px solid #fca5a5; }
 .arch-privacy .priv-icon { font-size: 1rem; }
@@ -105,4 +107,21 @@ tr:hover { background: #1e2230; }
 #model-table th:nth-child(2) { background: #12141c; z-index: 2; }
 #model-table th { white-space: nowrap; }
 #model-table td { white-space: nowrap; }
+
+/* ── Provider Comparison ── */
+.cmp-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.cmp-table th, .cmp-table td { padding: .6rem .75rem; text-align: center; border-bottom: 1px solid var(--border); }
+.cmp-table th { background: #12141c; color: #93c5fd; white-space: nowrap; }
+.cmp-table tr:hover { background: #1e2230; }
+.cmp-provider-label { font-size: .65rem; font-weight: 700; letter-spacing: .5px; }
+.cmp-faster { color: #6ee7b7; font-weight: 600; font-size: .8rem; }
+.cmp-slower { color: #fca5a5; font-weight: 600; font-size: .8rem; }
+.cmp-neutral { color: var(--muted); font-size: .8rem; }
+.cmp-unavailable { color: #fca5a5; font-size: .75rem; font-style: italic; }
+.cmp-na { color: var(--muted); opacity: .4; }
+.cmp-errored td { opacity: .6; }
+.cmp-tee-banner { display: flex; align-items: flex-start; gap: 1rem; background: #0c2d4a; border: 1px solid #1e5a8a; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+.cmp-tee-banner .cmp-tee-icon { font-size: 1.8rem; }
+.cmp-tee-banner strong { color: #67e8f9; font-size: .95rem; }
+.cmp-tee-banner p { color: var(--muted); font-size: .82rem; margin-top: .25rem; line-height: 1.4; }
 
