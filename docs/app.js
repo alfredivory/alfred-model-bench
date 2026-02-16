@@ -181,7 +181,7 @@ function renderAll() {
 /* ── Table ── */
 function renderTable(models, scenarios, summary, tokPerSec, costPerMTok) {
   const head = document.getElementById("table-head");
-  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Best Quant ¹", "VRAM ¹", "Est. Local TPS ¹", "Est. Local Score ¹", "$/1M tok", "NEAR AI $/M"];
+  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "OpenRouter Tok/s", "Best Quant ¹", "VRAM ¹", "Est. Local TPS ¹", "Est. Local Score ¹", "OpenRouter $/1M", "NEAR AI $/M"];
   cols.forEach((c, i) => {
     const th = document.createElement("th");
     if (c === "NEAR AI $/M") {
@@ -321,7 +321,7 @@ function renderBarChart(models, tokPerSec) {
     data: {
       labels: models.map(shortName),
       datasets: [{
-        label: "Output Tokens/sec",
+        label: "OpenRouter Tok/s",
         data,
         backgroundColor: models.map((_, i) => COLORS[i % COLORS.length] + "cc"),
         borderColor: models.map((_, i) => COLORS[i % COLORS.length]),
@@ -422,7 +422,7 @@ function renderRecommendations(allModels, summary, costPerMTok) {
   const cards = [
     { cls: "rec-card-cloud", icon: "☁️", title: "Best Cloud Agent", model: shortName(bestCloud.model), stats: [
       { label: "Score", value: bestCloud.score },
-      ...(bestCloud.cost != null ? [{ label: "Cost", value: `$${bestCloud.cost.toFixed(2)}/1M tok` }] : []),
+      ...(bestCloud.cost != null ? [{ label: "OpenRouter", value: `$${bestCloud.cost.toFixed(2)}/1M tok` }] : []),
     ], note: cloudNote },
     ...(bestLocal ? [{ cls: "rec-card-local", icon: "🖥️", title: "Best Local Agent (Mac Studio 512GB)", model: shortName(bestLocal.model), stats: [
       { label: "Est. Score", value: bestLocal.estScore },
@@ -432,7 +432,7 @@ function renderRecommendations(allModels, summary, costPerMTok) {
     ], note: localNote }] : []),
     ...(bestValue ? [{ cls: "rec-card-value", icon: "💰", title: "Best Value Agent", model: shortName(bestValue.model), stats: [
       { label: "Score", value: bestValue.score },
-      { label: "Cost", value: `$${bestValue.cost.toFixed(2)}/1M tok` },
+      { label: "OpenRouter", value: `$${bestValue.cost.toFixed(2)}/1M tok` },
       { label: "Score/$", value: bestValue.ratio.toFixed(1) },
     ], note: valueNote }] : []),
   ];
@@ -510,7 +510,7 @@ function renderArchitectureGuide(summary, costPerMTok, tokPerSec) {
         <h3>☁️ Cloud Tier — Complex Reasoning</h3>
         <div class="arch-tier-item">
           <span class="arch-model">${shortName(flash)}</span>
-          <span><span class="arch-badge arch-badge-score">Score ${flashScore}</span> <span class="arch-badge arch-badge-cost">$${flashCost ? flashCost.toFixed(2) : '1.15'}/M tok</span></span>
+          <span><span class="arch-badge arch-badge-score">Score ${flashScore}</span> <span class="arch-badge arch-badge-cost">OpenRouter: $${flashCost ? flashCost.toFixed(2) : '1.15'}/M tok</span></span>
         </div>
         <div class="arch-tier-item">
           <span class="arch-detail">⚡ Multi-step planning & orchestration</span>
@@ -538,11 +538,11 @@ function renderArchitectureGuide(summary, costPerMTok, tokPerSec) {
           <tbody>
             <tr><td>Local inference (${shortName(llama)})</td><td>~200 req/day · 12M tok/mo</td><td>$0.00</td></tr>
             <tr><td>Electricity (~150W avg)</td><td>~81 kWh/month</td><td>~$${electricityCost}</td></tr>
-            <tr><td>Cloud API (${shortName(flash)})</td><td>~30 req/day · 3.6M tok/mo</td><td>~$${cloudMonthlyCost.toFixed(2)}</td></tr>
+            <tr><td>Cloud API via OpenRouter (${shortName(flash)})</td><td>~30 req/day · 3.6M tok/mo</td><td>~$${cloudMonthlyCost.toFixed(2)}</td></tr>
             <tr><td><strong>Total</strong></td><td></td><td><strong>~$${(electricityCost + cloudMonthlyCost).toFixed(2)}/mo</strong></td></tr>
           </tbody>
         </table>
-        <p class="arch-note">vs. ~$${((12_000_000 + 3_600_000) * (costPerMTok["anthropic/claude-sonnet-4"] || 7.11) / 1_000_000).toFixed(0)}/mo running everything on Claude Sonnet 4 cloud API</p>
+        <p class="arch-note">vs. ~$${((12_000_000 + 3_600_000) * (costPerMTok["anthropic/claude-sonnet-4"] || 7.11) / 1_000_000).toFixed(0)}/mo running everything on Claude Sonnet 4 via OpenRouter</p>
       </div>
 
       <div>
