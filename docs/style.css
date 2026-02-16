@@ -30,4 +30,5 @@ tr:hover { background: #1e2230; }
 .tag-mac { background: #1e3a5f; color: #67e8f9; }
 .model-name { font-weight: 500; }
 .chart-container-bar { height: 400px; max-width: 900px; margin: 0 auto; }
+.footnote { color: var(--muted); font-size: .75rem; margin-top: 1rem; font-style: italic; }
 @media (max-width: 768px) { body { padding: 1rem; } .chart-container { height: 350px; } table { font-size: .75rem; } th, td { padding: .35rem .5rem; } }

@@ -6,14 +6,26 @@ const COLORS = [
   "#e879f9","#fbbf24",
 ];
 
-const OPEN_WEIGHT_PREFIXES = ["meta-llama/", "qwen/", "deepseek/", "mistral/"];
+const OPEN_WEIGHT_PREFIXES = ["meta-llama/", "qwen/", "deepseek/", "mistral/", "moonshotai/", "minimax/"];
 const MAC_STUDIO_MODELS = [
   "meta-llama/llama-3.3-70b-instruct",
   "meta-llama/llama-4-maverick",
   "qwen/qwen-2.5-72b-instruct",
   "deepseek/deepseek-chat-v3-0324",
   "deepseek/deepseek-r1-0528",
+  "moonshotai/kimi-k2.5",
+  "minimax/minimax-m1",
 ];
+
+const EST_LOCAL_TPS = {
+  "meta-llama/llama-3.3-70b-instruct": "~22 (Q4)",
+  "meta-llama/llama-4-maverick": "~15 (Q4)",
+  "qwen/qwen-2.5-72b-instruct": "~20 (Q4)",
+  "deepseek/deepseek-chat-v3-0324": "~19 (Q4)",
+  "deepseek/deepseek-r1-0528": "~17 (Q4)",
+  "moonshotai/kimi-k2.5": "~18 (Q4)",
+  "minimax/minimax-m1": "~16 (Q4)",
+};
 
 let sortDir = {};
 let radarChart = null;
@@ -137,7 +149,7 @@ function renderAll() {
 /* ── Table ── */
 function renderTable(models, scenarios, summary, tokPerSec) {
   const head = document.getElementById("table-head");
-  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Cost ($)"];
+  const cols = ["#", "Model", ...scenarios.map(s => s.replace(/_/g, " ")), "Avg", "Tok/s", "Est. Local TPS ¹", "Cost ($)"];
   cols.forEach((c, i) => {
     const th = document.createElement("th");
     th.textContent = c;
@@ -182,6 +194,11 @@ function renderTable(models, scenarios, summary, tokPerSec) {
     const tps = tokPerSec[m] || 0;
     tdTok.textContent = tps.toFixed(1);
     tr.appendChild(tdTok);
+
+    // Est. Local TPS
+    const tdLocal = document.createElement("td");
+    tdLocal.textContent = EST_LOCAL_TPS[m] || "—";
+    tr.appendChild(tdLocal);
 
     // Cost
     const tdCost = document.createElement("td");

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alfred Model Bench — Dashboard</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 </head>
 <body>
@@ -20,6 +20,7 @@
                 <thead><tr id="table-head"></tr></thead>
                 <tbody id="table-body"></tbody>
             </table>
+            <p class="footnote">¹ Est. Local TPS: estimated output tokens/sec on Mac Studio M3/M4 Ultra 512GB using Q4 quantisation (MLX/llama.cpp). Actual performance varies by quantisation level, prompt length, and runtime.</p>
         </section>
         <section id="radar-section">
             <h2>Radar Comparison</h2>
@@ -41,6 +42,6 @@
             </table>
         </section>
     </main>
-    <script src="app.js?v=2"></script>
+    <script src="app.js?v=3"></script>
 </body>
 </html>
